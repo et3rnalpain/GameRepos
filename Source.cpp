@@ -56,7 +56,7 @@ Player::Player()
 
 	x = rand() % (900 - 100 + 1) + 100;
 	y = rand() % (900 - 100 + 1) + 100;
-
+	player_sprite.setPosition(sf::Vector2f(x, y));
 	movement_speed = 25;
 	health = 10;
 	damage = 10;
@@ -72,7 +72,7 @@ Player::Player(double x, double y)
 
 	this->x = x;
 	this->y = y;
-
+	player_sprite.setPosition(sf::Vector2f(x, y));
 	movement_speed = 25;
 	health = 10;
 	damage = 10;
@@ -88,6 +88,7 @@ Player::Player(const Player& player)
 
 	this->x = player.x;
 	this->y = player.y;
+	player_sprite.setPosition(sf::Vector2f(x, y));
 	this->movement_speed = player.movement_speed;
 	this->health = player.health;
 	this->damage = player.damage;
@@ -345,7 +346,7 @@ int Timer::GetTime()
 
 int Game::checkCurrId() 
 {
-	int id;
+	int id = 0;
 	for (int i = 0; i < 4; i++) 
 	{
 		if (player->getX() <= maps[i].getX() + 500 && player->getX() >= maps[i].getX() && player->getY() <= maps[i].getY() + 500 && player->getY() >= maps[i].getY()) 
@@ -353,6 +354,7 @@ int Game::checkCurrId()
 			id = maps[i].getId();
 		}
 	}
+	std::cout << player->getX() << " " << player->getY() << std::endl;
 	return id;
 }
 
@@ -365,10 +367,10 @@ void Game::swapPlayerType()
 		currentId = id;
 		switch (currentId)
 		{
-		case 1: {delete player; player = new PlayerUsual(cx, cy); }break;
-		case 2: {delete player; player = new PlayerSnake(cx, cy); }break;
-		case 3: {delete player; player = new PlayerBoss(cx, cy); }break;
-		case 4: {delete player; player = new PlayerInvisible(cx, cy); }break;
+		case 1: {player = new PlayerUsual(); player->setXY(cx, cy); }break;
+		case 2: {player = new PlayerSnake(); player->setXY(cx, cy); }break;
+		case 3: {player = new PlayerBoss(); player->setXY(cx, cy); }break;
+		case 4: {player = new PlayerInvisible(); player->setXY(cx, cy); }break;
 		default:
 			break;
 		}
