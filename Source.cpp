@@ -107,6 +107,10 @@ double Player::getX() { return x; }
 
 double Player::getY() { return y; }
 
+int Player::getHealth() { return health; }
+
+int Player::getDamage() { return damage; }
+
 void Player::setXY(double x, double y)
 {
 	this->x = x;
@@ -198,7 +202,9 @@ void Game::StartGameCycle()
 	timer.StartTime();
 
 	Gui sword("sword.png", 0, 900);
+	TextGui swordnumb(player->getDamage(), 40, 100, 900);
 	Gui health("heart.png", 150, 900);
+	TextGui healthnumb(player->getHealth(), 40, 250, 900);
 
 	window.setVerticalSyncEnabled(true);
 	while (window.isOpen())
@@ -224,7 +230,9 @@ void Game::StartGameCycle()
 		player->checkPosition();
 		player->draw(window);
 		sword.draw(window);
+		swordnumb.draw(window);
 		health.draw(window);
+		healthnumb.draw(window);
 		window.display();
 		deltaTime = clock.getElapsedTime();
 
@@ -241,24 +249,14 @@ void Game::StartTimeCycle()
 	std::string Mess = "Your time is ";
 	std::string StTime;
 
-	font.loadFromFile("arial.ttf");
+	TimeWindow.create(sf::VideoMode(w, h), "Time");
+
 	StTime = std::to_string(TimeInSec);
 	Mess += StTime;
 	Mess += " sec.";
 
-	sf::Text text(Mess, font, 40);
-	text.setFillColor(sf::Color::Red);
-	text.setPosition(w/2-150, h/2-40);
-
-	TimeWindow.create(sf::VideoMode(w, h), "Time");
-	TimeWindow.clear(sf::Color::Yellow);
-
-	sf::Texture texture;
-	texture.loadFromFile("BackGroundTime.png");
-
-	sf::Sprite sprite;
-	sprite.setTexture(texture);
-	sprite.setPosition(0, 0);
+	TextGui text(Mess, 40, w / 2 - 150, h / 2 - 40);
+	Gui BackGround("BackGroundTime.png", 0, 0);
 
 	while (TimeWindow.isOpen())
 	{
@@ -269,8 +267,8 @@ void Game::StartTimeCycle()
 				TimeWindow.close();
 			}
 		}
-		TimeWindow.draw(sprite);
-		TimeWindow.draw(text);
+		BackGround.draw(TimeWindow);
+		text.draw(TimeWindow);
 		TimeWindow.display();
 	}
 }
@@ -330,28 +328,6 @@ int Game::checkCurrId()
 		if (player->getX() < maps[i].getX() + 500 && player->getX() > maps[i].getX() && player->getY() < maps[i].getY() + 500 && player->getY() > maps[i].getY()) 
 		{
 			id = maps[i].getId();
-		}
-	}
-	return id;
-}
-
-
-
-void Game::swapPlayerType()
-{
-	double cx = player->getX(), cy = player->getY();
-	int id = checkCurrId();
-	if (currentId != id) 
-	{
-		currentId = id;
-		switch (currentId)
-		{
-		case 1: {player = new PlayerUsual(); player->setXY(cx, cy); }break;
-		case 2: {player = new PlayerSnake();player->setXY(cx,cy); }break;
-		case 3: {player = new PlayerBoss();player->setXY(cx,cy); }break;
-		case 4: {player = new PlayerInvisible();player->setXY(cx,cy); }break;
-		default:
-			break;
 		}
 	}
 }
