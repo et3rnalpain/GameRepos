@@ -59,10 +59,10 @@ Player::Player()
 	movement_vector.x = 0;
 	movement_vector.y = 0;
 	player_sprite.setPosition(x,y);
-	max_speed = 5;
-	min_speed = 0;
-	acceleration = 1.5;
-	deceleration = 6;
+	max_speed = 6;
+	min_speed = 1;
+	acceleration = 3;
+	deceleration = 0.98;
 	health = 10;
 	damage = 10;
 
@@ -80,10 +80,10 @@ Player::Player(double x, double y)
 	movement_vector.x = 0;
 	movement_vector.y = 0;
 	player_sprite.setPosition(x,y);
-	max_speed = 5;
-	min_speed = 0;
-	acceleration = 1.1;
-	deceleration = 0.5;
+	max_speed = 6;
+	min_speed = 1;
+	acceleration = 3;
+	deceleration = 0.98;
 	health = 10;
 	damage = 10;
 
@@ -129,7 +129,6 @@ void Player::movement(double direction_x, double direction_y)
 
 	this->x += this->movement_vector.x;
 	this->y += this->movement_vector.y;
-	player_sprite.setPosition(x, y);
 }
 
 void Player::checkPosition()
@@ -138,9 +137,10 @@ void Player::checkPosition()
 	this->movement_vector.y *= this->deceleration;
 
 	if (std::abs(this->movement_vector.x) < this->min_speed)
-		this->movement_vector.x = 0.f;
+		this->movement_vector.x = 0;
 	if (std::abs(this->movement_vector.y) < this->min_speed)
-		this->movement_vector.y = 0.f;
+		this->movement_vector.y = 0;
+	player_sprite.setPosition(x, y);
 };
 
 void Player::draw(sf::RenderWindow& window){
@@ -197,6 +197,7 @@ class Game;
 void Game::StartGameCycle()
 {
 	window.create(sf::VideoMode(1000, 1000), "Game");
+	window.setFramerateLimit(144);
 	int array[4] = { 1,2,3,4 };
 	std::random_shuffle(&array[0], &array[3]);
 	for (int i = 0; i < 4; i++)
@@ -234,20 +235,23 @@ void Game::StartGameCycle()
 		swapPlayerType();
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
 				window.close();
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 				move_dir.x = 0; move_dir.y = -1;
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
 				move_dir.x = 0; move_dir.y = 1;
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 				move_dir.x = 1; move_dir.y = 0;
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 				move_dir.x = -1; move_dir.y = 0;
+			}
+			else {
+				move_dir.x = 0; move_dir.y = 0;
 			}
 		}
 		player->movement(move_dir.x, move_dir.y);
