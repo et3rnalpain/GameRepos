@@ -104,14 +104,35 @@ void Player::movement(sf::Event event, sf::Time deltaTime)
 {
 	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		this->y -= this->movement_speed;
-	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		this->y += this->movement_speed;
-	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		this->x += this->movement_speed;
-	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		this->x -= this->movement_speed;
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		this->y -= this->movement_speed * cos(45 * M_PI) / 180;
+		this->x += this->movement_speed * sin(45 * M_PI) / 180;
+	}
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		this->y += this->movement_speed * cos(45 * M_PI) / 180;
+		this->x += this->movement_speed * sin(45 * M_PI) / 180;
+	}
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		this->y += this->movement_speed * cos(45 * M_PI) / 180;
+		this->x -= this->movement_speed * sin(45 * M_PI) / 180;
+	}
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		this->y -= this->movement_speed * cos(45 * M_PI) / 180;
+		this->x -= this->movement_speed * sin(45 * M_PI) / 180;
+	}
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
-};
+}
+
 void Player::checkPosition()
 {
 
@@ -142,38 +163,6 @@ void Player::setXY(double x, double y)
 }
 
 class PlayerUsual;
-void PlayerUsual::movement(sf::Event event, sf::Time deltaTime)
-{
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		this->y -= this->movement_speed;
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		this->y += this->movement_speed;
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		this->x += this->movement_speed;
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		this->x -= this->movement_speed;
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			this->y -= this->movement_speed * cos(45 * M_PI) / 180;
-			this->x += this->movement_speed * sin(45 * M_PI) / 180;
-	}
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		this->y += this->movement_speed * cos(45 * M_PI) / 180;
-		this->x += this->movement_speed * sin(45 * M_PI) / 180;
-	}
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		this->y += this->movement_speed * cos(45 * M_PI) / 180;
-		this->x -= this->movement_speed * sin(45 * M_PI) / 180;
-	}
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		this->y -= this->movement_speed * cos(45 * M_PI) / 180;
-			this->x -= this->movement_speed * sin(45 * M_PI) / 180;
-		}
-	this->player_sprite.setPosition(sf::Vector2f(x, y));
-}
 
 class PlayerInvisible;
 
@@ -367,10 +356,10 @@ void Game::swapPlayerType()
 		currentId = id;
 		switch (currentId)
 		{
-		case 1: {player = new PlayerUsual(); player->setXY(cx, cy); }break;
-		case 2: {player = new PlayerSnake(); player->setXY(cx, cy); }break;
-		case 3: {player = new PlayerBoss(); player->setXY(cx, cy); }break;
-		case 4: {player = new PlayerInvisible(); player->setXY(cx, cy); }break;
+		case 1: {delete player; player = new PlayerUsual(cx, cy); }break;
+		case 2: {delete player; player = new PlayerSnake(cx, cy); }break;
+		case 3: {delete player; player = new PlayerBoss(cx, cy); }break;
+		case 4: {delete player; player = new PlayerInvisible(cx, cy);  }break;
 		default:
 			break;
 		}

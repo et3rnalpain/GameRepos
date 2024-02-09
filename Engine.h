@@ -82,7 +82,6 @@ public:
 
 		invis = false;
 	};
-	void movement(sf::Event event, sf::Time deltaTime);
 };
 
 class PlayerInvisible : public Player //невидимый игрок
