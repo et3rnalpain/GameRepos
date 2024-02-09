@@ -330,4 +330,62 @@ int Game::checkCurrId()
 			id = maps[i].getId();
 		}
 	}
+	return id;
+}
+
+void Game::swapPlayerType()
+{
+	double cx = player->getX(), cy = player->getY();
+	int id = checkCurrId();
+	if (currentId != id)
+	{
+		currentId = id;
+		switch (currentId)
+		{
+		case 1: {player = new PlayerUsual(); player->setXY(cx, cy); }break;
+		case 2: {player = new PlayerSnake(); player->setXY(cx, cy); }break;
+		case 3: {player = new PlayerBoss(); player->setXY(cx, cy); }break;
+		case 4: {player = new PlayerInvisible(); player->setXY(cx, cy); }break;
+		default:
+			break;
+		}
+	}
+}
+
+Gui::Gui(std::string filename, int x, int y)
+{
+	Texture.loadFromFile(filename);
+	Sprite.setTexture(Texture);
+	Sprite.setPosition(x, y);
+}
+
+void Gui::draw(sf::RenderWindow& window)
+{
+	window.draw(Sprite);
+}
+
+TextGui::TextGui(std::string message, int size, int x, int y)
+{
+	font.loadFromFile("arial.ttf");
+	text.setFont(font);
+	text.setString(message);
+	text.setCharacterSize(size);
+	text.setPosition(x, y);
+	text.setFillColor(sf::Color::Red);
+}
+
+TextGui::TextGui(int message, int size, int x, int y)
+{
+	std::string mess = std::to_string(message);
+	font.loadFromFile("arial.ttf");
+	text.setFont(font);
+	text.setString(mess);
+	text.setCharacterSize(size);
+	text.setPosition(x, y);
+	text.setFillColor(sf::Color::Red);
+}
+
+void TextGui::draw(sf::RenderWindow& window)
+{
+	window.draw(text);
 }
