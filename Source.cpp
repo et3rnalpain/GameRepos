@@ -389,3 +389,14 @@ void TextGui::draw(sf::RenderWindow& window)
 {
 	window.draw(text);
 }
+
+void TextGui::setstring(int message)
+{
+	std::string mess = std::to_string(message);
+	text.setString(mess);
+}
+
+void TextGui::setstring(std::string message)
+{
+	text.setString(message);
+}
