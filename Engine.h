@@ -37,6 +37,7 @@ public:
 	virtual void movement(sf::Event event, sf::Time deltaTime);
 	virtual void checkPosition();
 	virtual void draw(sf::RenderWindow& window);
+	bool CheckWall();
 };
 
 class PlayerUsual : public Player

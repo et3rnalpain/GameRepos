@@ -53,8 +53,8 @@ Player::Player()
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
 
-	x = rand() % 1000;
-	y = rand() % 1000;
+	x = rand() % (900 - 100 + 1) + 100;
+	y = rand() % (900 - 100 + 1) + 100;
 
 	movement_speed = 25;
 	health = 10;
@@ -85,6 +85,13 @@ void Player::checkPosition()
 };
 void Player::draw(sf::RenderWindow& window){
 	window.draw(player_sprite);
+}
+
+bool Player::CheckWall()
+{
+	if ((x + 50 >= 1000) || (x <= 0)) return 0;
+	if ((y + 50 >= 1000) || (y <= 0)) return 0;
+	return 1;
 }
 
 class PlayerUsual;
@@ -183,6 +190,7 @@ void Game::StartGameCycle()
 			}	
 			player->movement(event,deltaTime);
 		}
+		if (!player->CheckWall()) window.close();
 		for (int i = 0; i < 4; i++)
 		{
 			window.draw(maps[i].rect);
