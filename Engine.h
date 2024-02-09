@@ -153,6 +153,8 @@ private:
 public:
 	TextGui(std::string message, int size, int x, int y);
 	TextGui(int message, int size, int x, int y);
+	void setstring(std::string message);
+	void setstring(int message);
 	void draw(sf::RenderWindow& window);
 };
 

@@ -408,10 +408,21 @@ TextGui::TextGui(int message, int size, int x, int y)
 	text.setString(mess);
 	text.setCharacterSize(size);
 	text.setPosition(x, y);
-	text.setFillColor(sf::Color::Red);
+	text.setFillColor(sf::Color::White);
 }
 
 void TextGui::draw(sf::RenderWindow& window)
 {
 	window.draw(text);
+}
+
+void TextGui::setstring(int message)
+{
+	std::string mess = std::to_string(message);
+	text.setString(mess);
+}
+
+void TextGui::setstring(std::string message)
+{
+	text.setString(message);
 }
