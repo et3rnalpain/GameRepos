@@ -91,8 +91,6 @@ Player::Player(double x, double y)
 	damage = 10;
 
 	invis = false;
-
-	invis = false;
 }
 
 Player::Player(const Player& player)
