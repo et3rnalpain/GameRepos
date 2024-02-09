@@ -8,6 +8,6 @@ int main()
 	srand(time(NULL));
 	Game game;
 	game.StartGameCycle();
+	game.StartTimeCycle(); //закоментите если время заебало после каждого закрытия
 	return 0;
-	//prikol
 }
