@@ -382,7 +382,7 @@ TextGui::TextGui(int message, int size, int x, int y)
 	text.setString(mess);
 	text.setCharacterSize(size);
 	text.setPosition(x, y);
-	text.setFillColor(sf::Color::Red);
+	text.setFillColor(sf::Color::White);
 }
 
 void TextGui::draw(sf::RenderWindow& window)
