@@ -64,7 +64,7 @@ public:
 class Game
 {
 private:
-	Player* player = new Player(); //пока пусть плеер общий, потом это убрать и в гейм цикле мен€ть указатель на объект
+	Player* player = new Player(); //мен€йте на змею, если хотите протестить
 	sf::RenderWindow window;
 	Map* maps = new Map[4];
 public:
