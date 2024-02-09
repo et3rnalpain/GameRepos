@@ -191,6 +191,9 @@ void Game::StartGameCycle()
 	Timer timer;
 	timer.StartTime();
 
+	Gui sword("sword.png", 0, 900);
+	Gui health("heart.png", 150, 900);
+
 	window.setVerticalSyncEnabled(true);
 	while (window.isOpen())
 	{
@@ -214,6 +217,8 @@ void Game::StartGameCycle()
 		}
 		player->checkPosition();
 		player->draw(window);
+		sword.draw(window);
+		health.draw(window);
 		window.display();
 		deltaTime = clock.getElapsedTime();
 
