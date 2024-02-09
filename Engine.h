@@ -52,17 +52,23 @@ public:
 class PlayerUsual : public Player
 {
 public:
+	PlayerUsual() : Player() {}
+	PlayerUsual(double x, double y) : Player(x, y) {}
 	void movement(sf::Event event, sf::Time deltaTime);
 };
 
 class PlayerInvisible : public Player
 {
-
+public:
+	PlayerInvisible() : Player() {}
+	PlayerInvisible(double x, double y) : Player(x, y) {}
 };
 
 class PlayerBoss : public Player
 {
-
+public:
+	PlayerBoss() : Player() {}
+	PlayerBoss(double x, double y) : Player(x, y) {}
 };
 
 class PlayerSnake : public Player
@@ -72,6 +78,8 @@ private:
 	double snake_move_y[4] = { -2, 2, 0, 0 };
 	int direction = 0;
 public:
+	PlayerSnake() : Player() {}
+	PlayerSnake(double x, double y) : Player(x, y) {}
 	void movement(sf::Event event,sf::Time deltaTime) override;
 	void checkPosition() override;
 }; 
@@ -109,7 +117,7 @@ public:
 class Game
 {
 private:
-	Player* player = new PlayerUsual(); //мен€йте на змею, если хотите протестить
+	Player* player = new Player(); //мен€йте на змею, если хотите протестить
 	sf::RenderWindow window;
 	sf::RenderWindow TimeWindow;
 	Map* maps = new Map[4];

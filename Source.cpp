@@ -174,10 +174,7 @@ void PlayerUsual::movement(sf::Event event, sf::Time deltaTime)
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
 }
 
-class PlayerInvisible
-{
-	PlayerInvisible(double x, double y) : Player(x, y) {}
-};
+class PlayerInvisible;
 
 class PlayerBoss;
 
@@ -368,10 +365,10 @@ void Game::swapPlayerType()
 		currentId = id;
 		switch (currentId)
 		{
-		case 1: {player = new PlayerUsual(); player->setXY(cx, cy); }break;
-		case 2: {player = new PlayerSnake(); player->setXY(cx, cy); }break;
-		case 3: {player = new PlayerBoss(); player->setXY(cx, cy); }break;
-		case 4: {player = new PlayerInvisible(); player->setXY(cx, cy); }break;
+		case 1: {delete player; player = new PlayerUsual(cx, cy); }break;
+		case 2: {delete player; player = new PlayerSnake(cx, cy); }break;
+		case 3: {delete player; player = new PlayerBoss(cx, cy); }break;
+		case 4: {delete player; player = new PlayerInvisible(cx, cy); }break;
 		default:
 			break;
 		}
