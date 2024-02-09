@@ -219,6 +219,14 @@ void Game::StartTimeCycle()
 	text.setPosition(w/2-150, h/2-40);
 
 	TimeWindow.create(sf::VideoMode(w, h), "Time");
+	TimeWindow.clear(sf::Color::Yellow);
+
+	sf::Texture texture;//создаем объект Texture (текстура)
+	texture.loadFromFile("BackGroundTime.png");//загружаем картинку
+
+	sf::Sprite sprite;//создаем объект Sprite(спрайт)
+	sprite.setTexture(texture);//передаём в него объект Texture (текстуры)
+	sprite.setPosition(0, 0);//задаем начальные координаты появления спрайта
 
 	while (TimeWindow.isOpen())
 	{
@@ -229,6 +237,7 @@ void Game::StartTimeCycle()
 				TimeWindow.close();
 			}
 		}
+		TimeWindow.draw(sprite);
 		TimeWindow.draw(text);
 		TimeWindow.display();
 	}
