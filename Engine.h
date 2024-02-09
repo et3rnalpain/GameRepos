@@ -52,17 +52,107 @@ public:
 class PlayerUsual : public Player
 {
 public:
+	PlayerUsual() : Player()
+	{
+		player_texture.loadFromFile("player.jpg");
+		player_texture.setSmooth(true);
+		player_sprite.setTexture(player_texture);
+
+		x = rand() % (900 - 100 + 1) + 100;
+		y = rand() % (900 - 100 + 1) + 100;
+		player_sprite.setPosition(sf::Vector2f(x, y));
+		movement_speed = 25;
+		health = 10;
+		damage = 10;
+
+		invis = false;
+	}
+	PlayerUsual(double x, double y) : Player(x, y)
+	{
+		player_texture.loadFromFile("player.jpg");
+		player_texture.setSmooth(true);
+		player_sprite.setTexture(player_texture);
+
+		this->x = x;
+		this->y = y;
+
+		movement_speed = 25;
+		health = 10;
+		damage = 10;
+
+		invis = false;
+	};
 	void movement(sf::Event event, sf::Time deltaTime);
 };
 
 class PlayerInvisible : public Player
 {
+public:
+	PlayerInvisible() : Player()
+	{
+		player_texture.loadFromFile("player.jpg");
+		player_texture.setSmooth(true);
+		player_sprite.setTexture(player_texture);
 
+		x = rand() % (900 - 100 + 1) + 100;
+		y = rand() % (900 - 100 + 1) + 100;
+		player_sprite.setPosition(sf::Vector2f(x, y));
+		movement_speed = 25;
+		health = 10;
+		damage = 10;
+
+		invis = false;
+	}
+	PlayerInvisible(double x, double y) : Player(x,y)
+	{
+		player_texture.loadFromFile("player.jpg");
+		player_texture.setSmooth(true);
+		player_sprite.setTexture(player_texture);
+
+		this->x = x;
+		this->y = y;
+
+		movement_speed = 25;
+		health = 10;
+		damage = 10;
+
+		invis = false;
+	};
 };
 
 class PlayerBoss : public Player
 {
+public:
+	PlayerBoss() : Player()
+	{
+		player_texture.loadFromFile("player.jpg");
+		player_texture.setSmooth(true);
+		player_sprite.setTexture(player_texture);
 
+		x = rand() % (900 - 100 + 1) + 100;
+		y = rand() % (900 - 100 + 1) + 100;
+		player_sprite.setPosition(sf::Vector2f(x, y));
+		movement_speed = 25;
+		health = 10;
+		damage = 10;
+
+		invis = false;
+	}
+	PlayerBoss(double x, double y) : Player(x, y) 
+	{
+		player_texture.loadFromFile("player.jpg");
+		player_texture.setSmooth(true);
+		player_sprite.setTexture(player_texture);
+
+		this->x = x;
+		this->y = y;
+
+		movement_speed = 25;
+		health = 10;
+		damage = 10;
+
+		invis = false;
+	}
 };
 
 class PlayerSnake : public Player
@@ -72,6 +162,36 @@ private:
 	double snake_move_y[4] = { -2, 2, 0, 0 };
 	int direction = 0;
 public:
+	PlayerSnake() : Player() 
+	{
+		player_texture.loadFromFile("player.jpg");
+		player_texture.setSmooth(true);
+		player_sprite.setTexture(player_texture);
+
+		x = rand() % (900 - 100 + 1) + 100;
+		y = rand() % (900 - 100 + 1) + 100;
+		player_sprite.setPosition(sf::Vector2f(x, y));
+		movement_speed = 25;
+		health = 10;
+		damage = 10;
+
+		invis = false;
+	}
+	PlayerSnake(double x, double y) : Player(x, y)
+	{
+		player_texture.loadFromFile("player.jpg");
+		player_texture.setSmooth(true);
+		player_sprite.setTexture(player_texture);
+
+		this->x = x;
+		this->y = y;
+
+		movement_speed = 25;
+		health = 10;
+		damage = 10;
+
+		invis = false;
+	}
 	void movement(sf::Event event,sf::Time deltaTime) override;
 	void checkPosition() override;
 }; 
@@ -109,7 +229,7 @@ public:
 class Game
 {
 private:
-	Player* player = new PlayerUsual(); //мен€йте на змею, если хотите протестить
+	Player* player = new Player(); //мен€йте на змею, если хотите протестить
 	sf::RenderWindow window;
 	sf::RenderWindow TimeWindow;
 	Map* maps = new Map[4];
