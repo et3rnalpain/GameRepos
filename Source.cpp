@@ -94,9 +94,31 @@ void PlayerUsual::movement(sf::Event event)
 	/*x += movement_speed;
 	y += movement_speed;*/
 }
+
 class PlayerInvisible;
+
 class PlayerBoss;
+
 class PlayerSnake;
+void PlayerSnake::movement(sf::Event event)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		this->direction = 1;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		this->direction = 2;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		this->direction = 3;
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		this->direction = 4;
+}
+void PlayerSnake::checkPosition()
+{
+	this->x += this->snake_move_x[this->direction - 1];
+	this->y += this->snake_move_y[this->direction - 1];
+	this->player_shape.setPosition(sf::Vector2f(x, y));
+	this->player_sprite.setPosition(sf::Vector2f(x, y));
+}
+
 class Game;
 void Game::StartGameCycle()
 {
@@ -118,13 +140,14 @@ void Game::StartGameCycle()
 		{
 			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 				window.close();
-			}
+			}	
 			player->movement(event);
 		}
 		for (int i = 0; i < 4; i++)
 		{
 			window.draw(maps[i].rect);
 		}
+		player->checkPosition();
 		player->draw(window);
 		window.display();
 	}

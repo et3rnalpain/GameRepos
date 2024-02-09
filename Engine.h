@@ -52,13 +52,19 @@ class PlayerBoss : public Player
 
 class PlayerSnake : public Player
 {
-
-};
+private:
+	int snake_move_x[4] = { 0, 0, 1, -1 };
+	int snake_move_y[4] = { -1, 1, 0, 0 };
+	int direction = 3;
+public:
+	void movement(sf::Event event) override;
+	void checkPosition() override;
+}; 
 
 class Game
 {
 private:
-	Player* player = new Player();
+	Player* player = new Player(); //пока пусть плеер общий, потом это убрать и в гейм цикле менять указатель на объект
 	sf::RenderWindow window;
 	Map* maps = new Map[4];
 public:
