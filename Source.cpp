@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 
+
 class Map;
 Map::Map()
 {
@@ -67,7 +68,7 @@ void Player::attack()
 {
 
 };
-void Player::movement(sf::Event event)
+void Player::movement(sf::Event event, sf::Time deltaTime)
 {
 	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		this->y -= this->movement_speed;
@@ -89,16 +90,36 @@ void Player::draw(sf::RenderWindow& window){
 }
 
 class PlayerUsual;
-void PlayerUsual::movement(sf::Event event)
+void PlayerUsual::movement(sf::Event event, sf::Time deltaTime)
 {
 	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		this->y -= this->movement_speed;
-	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		this->y += this->movement_speed;
-	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		this->x += this->movement_speed;
-	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		this->x -= this->movement_speed;
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			this->y -= this->movement_speed * cos(45 * M_PI) / 180;
+			this->x += this->movement_speed * sin(45 * M_PI) / 180;
+	}
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	{
+		this->y += this->movement_speed * cos(45 * M_PI) / 180;
+		this->x += this->movement_speed * sin(45 * M_PI) / 180;
+	}
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		this->y += this->movement_speed * cos(45 * M_PI) / 180;
+		this->x -= this->movement_speed * sin(45 * M_PI) / 180;
+	}
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		this->y -= this->movement_speed * cos(45 * M_PI) / 180;
+			this->x -= this->movement_speed * sin(45 * M_PI) / 180;
+		}
 	this->player_shape.setPosition(sf::Vector2f(x, y));
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
 }
@@ -108,7 +129,7 @@ class PlayerInvisible;
 class PlayerBoss;
 
 class PlayerSnake;
-void PlayerSnake::movement(sf::Event event)
+void PlayerSnake::movement(sf::Event event, sf::Time deltaTime)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		this->direction = 1;
@@ -142,22 +163,46 @@ void Game::StartGameCycle()
 	maps[2].setXY(0, 500);
 	maps[3].setXY(500, 500);
 	sf::Event event;
+	sf::Clock clock;
+	sf::Time deltaTime;
+	window.setVerticalSyncEnabled(true);
 	while (window.isOpen())
 	{
-	
+		clock.restart();
+
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 				window.close();
 			}	
-			player->movement(event);
+			player->movement(event,deltaTime);
 		}
 		for (int i = 0; i < 4; i++)
 		{
 			window.draw(maps[i].rect);
 		}
+		for (int i = 0; i < 10; i++)
+		{
+			buffs[i].draw(window);
+		}
 		player->checkPosition();
 		player->draw(window);
 		window.display();
+		deltaTime = clock.getElapsedTime();
+
 	}
+}
+class Buff;
+class Health;
+class Damage;
+
+Buff::Buff() 
+{
+	x = rand() % 1000;
+	y = rand() % 1000;
+}
+
+void Buff::draw(sf::RenderWindow& window)
+{
+	window.draw(this->buff_sprite);
 }

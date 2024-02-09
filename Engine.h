@@ -3,6 +3,10 @@
 #include <ctime>
 #include <algorithm>
 
+#define M_PI 3.1415926535
+
+
+
 class Map
 {
 private:
@@ -29,7 +33,7 @@ protected:
 public:
 	Player();
 	virtual void attack();
-	virtual void movement(sf::Event event);
+	virtual void movement(sf::Event event, sf::Time deltaTime);
 	virtual void checkPosition();
 	virtual void draw(sf::RenderWindow& window);
 };
@@ -37,7 +41,7 @@ public:
 class PlayerUsual : public Player
 {
 public:
-	void movement(sf::Event event) override;
+	void movement(sf::Event event, sf::Time deltaTime);
 };
 
 class PlayerInvisible : public Player
@@ -57,36 +61,30 @@ private:
 	double snake_move_y[4] = { -0.1, 0.1, 0, 0 };
 	int direction = 3;
 public:
-	void movement(sf::Event event) override;
+	void movement(sf::Event event,sf::Time deltaTime) override;
 	void checkPosition() override;
 }; 
 
-class Game
-{
-private:
-	Player* player = new PlayerUsual(); //мен€йте на змею, если хотите протестить
-	sf::RenderWindow window;
-	Map* maps = new Map[4];
-public:
-	void StartGameCycle();
-};
-
-class Buff 
+class Buff
 {
 protected:
 	sf::RectangleShape buff_shape;
 	sf::Texture buff_texture;
+	sf::Sprite buff_sprite;
+	double x, y;
 public:
 	Buff();
-	virtual void BuffPlayer(Player& player);
+	//virtual void BuffPlayer(Player& player);
+	virtual void draw(sf::RenderWindow& window);
 };
 
-class Health : public Buff 
+class Health : public Buff
 {
 private:
 	int bonus = 5;
 public:
-	void BuffPlayer(Player& player) override;
+	Health();
+	//void BuffPlayer(Player& player) override;
 };
 
 class Damage : public Buff
@@ -94,5 +92,18 @@ class Damage : public Buff
 private:
 	int bonus = 5;
 public:
-	void BuffPlayer(Player& player) override;
+	Damage();
+	//void BuffPlayer(Player& player) override;
 };
+
+class Game
+{
+private:
+	Player* player = new PlayerUsual(); //мен€йте на змею, если хотите протестить
+	sf::RenderWindow window;
+	Map* maps = new Map[4];
+	Buff* buffs = new Buff[10];
+public:
+	void StartGameCycle();
+};
+
