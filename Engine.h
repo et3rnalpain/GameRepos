@@ -25,7 +25,7 @@ public:
 class Player
 {
 protected:
-	sf::RectangleShape player_shape;
+
 	sf::Texture player_texture;
 	sf::Sprite player_sprite;
 	double x, y, movement_speed, health, damage;
@@ -68,7 +68,6 @@ public:
 class Buff
 {
 protected:
-	sf::RectangleShape buff_shape;
 	sf::Texture buff_texture;
 	sf::Sprite buff_sprite;
 	double x, y;
@@ -83,7 +82,6 @@ class Health : public Buff
 private:
 	int bonus = 5;
 public:
-	Health();
 	//void BuffPlayer(Player& player) override;
 };
 
@@ -92,7 +90,6 @@ class Damage : public Buff
 private:
 	int bonus = 5;
 public:
-	Damage();
 	//void BuffPlayer(Player& player) override;
 };
 

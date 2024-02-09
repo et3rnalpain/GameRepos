@@ -49,7 +49,6 @@ void Map::setXY(int x_, int y_)
 class Player;
 Player::Player()
 {
-	player_shape.setSize(sf::Vector2f(50, 50));
 	player_texture.loadFromFile("player.jpg");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
@@ -78,7 +77,6 @@ void Player::movement(sf::Event event, sf::Time deltaTime)
 		this->x += this->movement_speed;
 	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		this->x -= this->movement_speed;
-	this->player_shape.setPosition(sf::Vector2f(x, y));
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
 };
 void Player::checkPosition()
@@ -120,7 +118,6 @@ void PlayerUsual::movement(sf::Event event, sf::Time deltaTime)
 		this->y -= this->movement_speed * cos(45 * M_PI) / 180;
 			this->x -= this->movement_speed * sin(45 * M_PI) / 180;
 		}
-	this->player_shape.setPosition(sf::Vector2f(x, y));
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
 }
 
@@ -144,7 +141,6 @@ void PlayerSnake::checkPosition()
 {
 	this->x += this->snake_move_x[this->direction - 1];
 	this->y += this->snake_move_y[this->direction - 1];
-	this->player_shape.setPosition(sf::Vector2f(x, y));
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
 }
 
