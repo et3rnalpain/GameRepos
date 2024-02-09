@@ -73,7 +73,7 @@ protected:
 	sf::Sprite buff_sprite;
 	double x, y;
 public:
-	Buff(bool type);
+	Buff();
 	//virtual void BuffPlayer(Player& player);
 	virtual void draw(sf::RenderWindow& window);
 };
@@ -83,6 +83,7 @@ class Health : public Buff
 private:
 	int bonus = 5;
 public:
+	Health();
 	//void BuffPlayer(Player& player) override;
 };
 
@@ -91,6 +92,7 @@ class Damage : public Buff
 private:
 	int bonus = 5;
 public:
+	Damage();
 	//void BuffPlayer(Player& player) override;
 };
 
@@ -100,8 +102,7 @@ private:
 	Player* player = new PlayerSnake(); //мен€йте на змею, если хотите протестить
 	sf::RenderWindow window;
 	Map* maps = new Map[4];
-	//Damage dbuffs[10];
-	//Health hbuffs[10];
+	Buff* buffs = new Buff[15];
 public:
 	void StartGameCycle();
 };

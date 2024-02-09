@@ -154,6 +154,12 @@ void Game::StartGameCycle()
 	{
 		maps[i].setId(array[i]);
 	}
+	for (int i = 0; i < 15; i++) 
+	{
+		int rnd = rand() % 2;
+		if (rnd == 0) buffs[i] = Damage();
+		else buffs[i] = Health();
+	}
 	maps[0].setXY(0, 0);
 	maps[1].setXY(500, 0);
 	maps[2].setXY(0, 500);
@@ -183,7 +189,7 @@ void Game::StartGameCycle()
 		}
 		for (int i = 0; i < 10; i++)
 		{
-			//buffs[i].draw(window);
+			buffs[i].draw(window);
 		}
 		player->checkPosition();
 		player->draw(window);
@@ -200,7 +206,7 @@ class Buff;
 class Health;
 class Damage;
 
-Buff::Buff(bool type) 
+Buff::Buff() 
 {
 	x = rand() % 1000;
 	y = rand() % 1000;
@@ -211,6 +217,22 @@ void Buff::draw(sf::RenderWindow& window)
 	window.draw(this->buff_sprite);
 }
 
+Damage::Damage() 
+{
+	buff_texture.loadFromFile("buff1.jpg");
+	buff_texture.setSmooth(true);
+	buff_sprite.setTexture(buff_texture);
+	buff_sprite.setPosition(sf::Vector2f(x, y));
+}
+
+Health::Health()
+{
+	buff_texture.loadFromFile("buff2.jpg");
+	buff_texture.setSmooth(true);
+	buff_sprite.setTexture(buff_texture);
+	buff_sprite.setPosition(sf::Vector2f(x, y));
+	buff_sprite.setScale(sf::Vector2f(0.05f, 0.05f));
+}
 
 void Timer::StartTime()
 {
