@@ -327,12 +327,12 @@ int Game::checkCurrId()
 	int id = 0;
 	for (int i = 0; i < 4; i++)
 	{
-		if (player->getX() <= maps[i].getX() + 500 && player->getX() >= maps[i].getX() && player->getY() <= maps[i].getY() + 500 && player->getY() >= maps[i].getY())
+		if (player->getSpriteCenter().x <= maps[i].getX() + 500 && player->getSpriteCenter().x >= maps[i].getX() && player->getSpriteCenter().y <= maps[i].getY() + 500 && player->getSpriteCenter().y >= maps[i].getY())
 		{
 			id = maps[i].getId();
 		}
 	}
-	std::cout << player->getX() << " " << player->getY() << std::endl;
+	//std::cout << player->getSpriteCenter().x << " " << player->getSpriteCenter().y << std::endl;
 	return id;
 }
 
