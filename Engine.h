@@ -2,7 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include <ctime>
 #include <algorithm>
-//1234
+
 class Map
 {
 private:
@@ -21,19 +21,23 @@ public:
 class Player
 {
 protected:
-	double x, y, ms, health, damage;
+	sf::RectangleShape player_shape;
+	sf::Texture player_texture;
+	sf::Sprite player_sprite;
+	double x, y, movement_speed, health, damage;
 	bool invis;
 public:
 	Player();
 	virtual void attack();
-	virtual void move();
+	virtual void movement(sf::Event event);
 	virtual void checkPosition();
+	virtual void draw(sf::RenderWindow& window);
 };
 
 class PlayerUsual : public Player
 {
 public:
-	void move() override;
+	void movement(sf::Event event) override;
 };
 
 class PlayerInvisible : public Player
@@ -54,7 +58,7 @@ class PlayerSnake : public Player
 class Game
 {
 private:
-	Player* player;
+	Player* player = new Player();
 	sf::RenderWindow window;
 	Map* maps = new Map[4];
 public:

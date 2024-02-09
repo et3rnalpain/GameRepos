@@ -43,31 +43,56 @@ void Map::setXY(int x_, int y_)
 	Map::rect.setPosition(sf::Vector2f(x, y));
 	Map::rect.setFillColor(color);
 }
+
+
 class Player;
-Player::Player() {};
-void Player::attack()
+Player::Player()
 {
-	//huy
+	player_shape.setSize(sf::Vector2f(100, 100));
+	player_texture.loadFromFile("player.jpg");
+	player_texture.setSmooth(true);
+	player_sprite.setTexture(player_texture);
+
+	x = rand() % 1000;
+	y = rand() % 1000;
+
+	movement_speed = 25;
+	health = 10;
+	damage = 10;
+
+	invis = false;
 };
 
-
-//ZALUOPA
-
-
-void Player::move()
+void Player::attack()
 {
-	//huy nikita
+
+};
+void Player::movement(sf::Event event)
+{
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		this->y -= this->movement_speed;
+	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		this->y += this->movement_speed;
+	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		this->x += this->movement_speed;
+	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		this->x -= this->movement_speed;
+	this->player_shape.setPosition(sf::Vector2f(x, y));
+	this->player_sprite.setPosition(sf::Vector2f(x, y));
 };
 void Player::checkPosition()
 {
-	//HUI 
-	//HUIIII!!
+
 };
+void Player::draw(sf::RenderWindow& window){
+	window.draw(player_sprite);
+}
+
 class PlayerUsual;
-void PlayerUsual::move()
+void PlayerUsual::movement(sf::Event event)
 {
-	x += ms;
-	y += ms;
+	/*x += movement_speed;
+	y += movement_speed;*/
 }
 class PlayerInvisible;
 class PlayerBoss;
@@ -91,15 +116,16 @@ void Game::StartGameCycle()
 	{
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-			{
+			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 				window.close();
 			}
+			player->movement(event);
 		}
 		for (int i = 0; i < 4; i++)
 		{
 			window.draw(maps[i].rect);
 		}
+		player->draw(window);
 		window.display();
 	}
 }
