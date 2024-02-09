@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <ctime>
+#include <cmath>
 #include <iostream>
 #include <algorithm>
 
@@ -31,14 +32,15 @@ protected:
 
 	sf::Texture player_texture;
 	sf::Sprite player_sprite;
-	double x, y, movement_speed, health, damage;
+	sf::Vector2f movement_vector;
+	double x, y,acceleration, deceleration, max_speed, min_speed, health, damage;
 	bool invis;
 public:
 	Player();
 	Player(double x, double y);
 	Player(const Player& player);
 	virtual void attack();
-	virtual void movement(sf::Event event, sf::Time deltaTime);
+	virtual void movement(double dir_x, double dir_y);
 	virtual void checkPosition();
 	virtual void draw(sf::RenderWindow& window);
 	double getX();
@@ -52,106 +54,22 @@ public:
 class PlayerUsual : public Player //обычный игрок
 {
 public:
-	PlayerUsual() : Player()
-	{
-		player_texture.loadFromFile("player.jpg");
-		player_texture.setSmooth(true);
-		player_sprite.setTexture(player_texture);
-
-		x = rand() % (900 - 100 + 1) + 100;
-		y = rand() % (900 - 100 + 1) + 100;
-		player_sprite.setPosition(sf::Vector2f(x, y));
-		movement_speed = 25;
-		health = 10;
-		damage = 10;
-
-		invis = false;
-	}
-	PlayerUsual(double x, double y) : Player(x, y)
-	{
-		player_texture.loadFromFile("player.jpg");
-		player_texture.setSmooth(true);
-		player_sprite.setTexture(player_texture);
-
-		this->x = x;
-		this->y = y;
-
-		movement_speed = 25;
-		health = 10;
-		damage = 10;
-
-		invis = false;
-	};
+	PlayerUsual() : Player() {}
+	PlayerUsual(double x, double y) : Player(x, y) {}
 };
 
 class PlayerInvisible : public Player //невидимый игрок
 {
 public:
-	PlayerInvisible() : Player()
-	{
-		player_texture.loadFromFile("player.jpg");
-		player_texture.setSmooth(true);
-		player_sprite.setTexture(player_texture);
-
-		x = rand() % (900 - 100 + 1) + 100;
-		y = rand() % (900 - 100 + 1) + 100;
-		player_sprite.setPosition(sf::Vector2f(x, y));
-		movement_speed = 25;
-		health = 10;
-		damage = 10;
-
-		invis = false;
-	}
-	PlayerInvisible(double x, double y) : Player(x,y)
-	{
-		player_texture.loadFromFile("player.jpg");
-		player_texture.setSmooth(true);
-		player_sprite.setTexture(player_texture);
-
-		this->x = x;
-		this->y = y;
-
-		movement_speed = 25;
-		health = 10;
-		damage = 10;
-
-		invis = false;
-	};
+	PlayerInvisible() : Player() {}
+	PlayerInvisible(double x, double y) : Player(x,y) {}
 };
 
 class PlayerBoss : public Player //игрок на поле босса
 {
 public:
-	PlayerBoss() : Player()
-	{
-		player_texture.loadFromFile("player.jpg");
-		player_texture.setSmooth(true);
-		player_sprite.setTexture(player_texture);
-
-		x = rand() % (900 - 100 + 1) + 100;
-		y = rand() % (900 - 100 + 1) + 100;
-		player_sprite.setPosition(sf::Vector2f(x, y));
-		movement_speed = 25;
-		health = 10;
-		damage = 10;
-
-		invis = false;
-	}
-	PlayerBoss(double x, double y) : Player(x, y) 
-	{
-		player_texture.loadFromFile("player.jpg");
-		player_texture.setSmooth(true);
-		player_sprite.setTexture(player_texture);
-
-		this->x = x;
-		this->y = y;
-
-		movement_speed = 25;
-		health = 10;
-		damage = 10;
-
-		invis = false;
-	}
+	PlayerBoss() : Player() {}
+	PlayerBoss(double x, double y) : Player(x, y) {}
 };
 
 class PlayerSnake : public Player //игрок который ходит как змеЮКА СУКА!
@@ -161,37 +79,9 @@ private:
 	double snake_move_y[4] = { -2, 2, 0, 0 };
 	int direction = 1;
 public:
-	PlayerSnake() : Player() 
-	{
-		player_texture.loadFromFile("player.jpg");
-		player_texture.setSmooth(true);
-		player_sprite.setTexture(player_texture);
-
-		x = rand() % (900 - 100 + 1) + 100;
-		y = rand() % (900 - 100 + 1) + 100;
-		player_sprite.setPosition(sf::Vector2f(x, y));
-		movement_speed = 25;
-		health = 10;
-		damage = 10;
-
-		invis = false;
-	}
-	PlayerSnake(double x, double y) : Player(x, y)
-	{
-		player_texture.loadFromFile("player.jpg");
-		player_texture.setSmooth(true);
-		player_sprite.setTexture(player_texture);
-
-		this->x = x;
-		this->y = y;
-
-		movement_speed = 25;
-		health = 10;
-		damage = 10;
-
-		invis = false;
-	}
-	void movement(sf::Event event,sf::Time deltaTime) override;
+	PlayerSnake() : Player() {}
+	PlayerSnake(double x, double y) : Player(x, y) {}
+	void movement(double dir_x, double dir_y) override;
 	void checkPosition() override;
 }; 
 

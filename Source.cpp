@@ -56,8 +56,13 @@ Player::Player()
 
 	x = rand() % (900 - 100 + 1) + 100;
 	y = rand() % (900 - 100 + 1) + 100;
-	player_sprite.setPosition(sf::Vector2f(x, y));
-	movement_speed = 25;
+	movement_vector.x = 0;
+	movement_vector.y = 0;
+	player_sprite.setPosition(x,y);
+	max_speed = 5;
+	min_speed = 0;
+	acceleration = 1.5;
+	deceleration = 6;
 	health = 10;
 	damage = 10;
 
@@ -72,10 +77,17 @@ Player::Player(double x, double y)
 
 	this->x = x;
 	this->y = y;
-	player_sprite.setPosition(sf::Vector2f(x, y));
-	movement_speed = 25;
+	movement_vector.x = 0;
+	movement_vector.y = 0;
+	player_sprite.setPosition(x,y);
+	max_speed = 5;
+	min_speed = 0;
+	acceleration = 1.1;
+	deceleration = 0.5;
 	health = 10;
 	damage = 10;
+
+	invis = false;
 
 	invis = false;
 }
@@ -88,10 +100,15 @@ Player::Player(const Player& player)
 
 	this->x = player.x;
 	this->y = player.y;
-	player_sprite.setPosition(sf::Vector2f(x, y));
-	this->movement_speed = player.movement_speed;
+	this->movement_vector = player.movement_vector;
+	player_sprite.setPosition(this->x, this->y);
+	this->max_speed = player.max_speed;
+	this->min_speed = player.min_speed;
+	this->acceleration = player.acceleration;
+	this->deceleration = player.deceleration;
 	this->health = player.health;
 	this->damage = player.damage;
+
 	this->invis = player.invis;
 }
 
@@ -100,43 +117,32 @@ void Player::attack()
 
 };
 
-void Player::movement(sf::Event event, sf::Time deltaTime)
+void Player::movement(double direction_x, double direction_y)
 {
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		this->y -= this->movement_speed;
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		this->y += this->movement_speed;
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		this->x += this->movement_speed;
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		this->x -= this->movement_speed;
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		this->y -= this->movement_speed * cos(45 * M_PI) / 180;
-		this->x += this->movement_speed * sin(45 * M_PI) / 180;
-	}
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		this->y += this->movement_speed * cos(45 * M_PI) / 180;
-		this->x += this->movement_speed * sin(45 * M_PI) / 180;
-	}
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		this->y += this->movement_speed * cos(45 * M_PI) / 180;
-		this->x -= this->movement_speed * sin(45 * M_PI) / 180;
-	}
-	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		this->y -= this->movement_speed * cos(45 * M_PI) / 180;
-		this->x -= this->movement_speed * sin(45 * M_PI) / 180;
-	}
-	this->player_sprite.setPosition(sf::Vector2f(x, y));
+	this->movement_vector.x += direction_x * this->acceleration;
+	this->movement_vector.y += direction_y * this->acceleration;
+
+	if (std::abs(this->movement_vector.x) > this->max_speed)
+		this->movement_vector.x = this->max_speed * ((this->movement_vector.x < 0.f) ? -1.f : 1.f);
+	if (std::abs(this->movement_vector.y) > this->max_speed)
+		this->movement_vector.y = this->max_speed * ((this->movement_vector.y < 0.f) ? -1.f : 1.f);
+
+	this->x += this->movement_vector.x;
+	this->y += this->movement_vector.y;
+	player_sprite.setPosition(x, y);
 }
 
 void Player::checkPosition()
 {
+	this->movement_vector.x *= this->deceleration;
+	this->movement_vector.y *= this->deceleration;
 
+	if (std::abs(this->movement_vector.x) < this->min_speed)
+		this->movement_vector.x = 0.f;
+	if (std::abs(this->movement_vector.y) < this->min_speed)
+		this->movement_vector.y = 0.f;
 };
+
 void Player::draw(sf::RenderWindow& window){
 	window.draw(player_sprite);
 }
@@ -169,15 +175,15 @@ class PlayerInvisible;
 class PlayerBoss;
 
 class PlayerSnake;
-void PlayerSnake::movement(sf::Event event, sf::Time deltaTime)
+void PlayerSnake::movement(double dir_x, double dir_y)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (dir_x == 0.f && dir_y == -1.f)
 		this->direction = 1;
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	else if (dir_x == 0.f && dir_y == 1.f)
 		this->direction = 2;
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	else if (dir_x == 1.f && dir_y == 0.f)
 		this->direction = 3;
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	else if (dir_x == -1.f && dir_y == 0.f)
 		this->direction = 4;
 }
 void PlayerSnake::checkPosition()
@@ -219,6 +225,8 @@ void Game::StartGameCycle()
 	Gui health("heart.png", 150, 900);
 	TextGui healthnumb(player->getHealth(), 40, 250, 900);
 
+	sf::Vector2f move_dir = sf::Vector2f(0.f, 0.f);
+
 	window.setVerticalSyncEnabled(true);
 	while (window.isOpen())
 	{
@@ -228,10 +236,23 @@ void Game::StartGameCycle()
 		{
 			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
 				window.close();
-			}	
-			player->movement(event,deltaTime);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+				move_dir.x = 0; move_dir.y = -1;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+				move_dir.x = 0; move_dir.y = 1;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+				move_dir.x = 1; move_dir.y = 0;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+				move_dir.x = -1; move_dir.y = 0;
+			}
 		}
-		if (!player->CheckWall()) window.close();
+		player->movement(move_dir.x, move_dir.y);
+		player->checkPosition();
+		//if (!player->CheckWall()) window.close();
 		for (int i = 0; i < 4; i++)
 		{
 			window.draw(maps[i].rect);
