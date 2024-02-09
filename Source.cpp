@@ -56,7 +56,7 @@ Player::Player()
 	x = rand() % 1000;
 	y = rand() % 1000;
 
-	movement_speed = 10;
+	movement_speed = 25;
 	health = 10;
 	damage = 10;
 
@@ -179,7 +179,7 @@ void Game::StartGameCycle()
 		}
 		for (int i = 0; i < 10; i++)
 		{
-			buffs[i].draw(window);
+			//buffs[i].draw(window);
 		}
 		player->checkPosition();
 		player->draw(window);
@@ -192,7 +192,7 @@ class Buff;
 class Health;
 class Damage;
 
-Buff::Buff() 
+Buff::Buff(bool type) 
 {
 	x = rand() % 1000;
 	y = rand() % 1000;
