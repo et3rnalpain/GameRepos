@@ -45,7 +45,8 @@ void Map::setXY(int x_, int y_)
 	Map::rect.setFillColor(color);
 }
 
-
+double Map::getX() { return x; }
+double Map::getY() { return y; }
 class Player;
 Player::Player()
 {
@@ -93,6 +94,18 @@ bool Player::CheckWall()
 	if ((y + 50 >= 1000) || (y <= 0)) return 0;
 	return 1;
 }
+
+Player::Player(const Player& player) 
+{
+	this->x = player.x;
+	this->y = player.y;
+	this->health = player.health;
+	this->damage = player.damage;
+}
+
+double Player::getX() { return x; }
+
+double Player::getY() { return y; }
 
 class PlayerUsual;
 void PlayerUsual::movement(sf::Event event, sf::Time deltaTime)
@@ -182,7 +195,7 @@ void Game::StartGameCycle()
 	while (window.isOpen())
 	{
 		clock.restart();
-
+		swapPlayerType();
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
@@ -296,4 +309,16 @@ void Timer::EndTime()
 int Timer::GetTime()
 {
 	return seconds;
+}
+
+void Game::swapPlayerType() 
+{
+	int id;
+	for (int i = 0; i < 4; i++) 
+	{
+		if (player->getX() < maps[i].getX() + 500 && player->getX() > maps[i].getX() && player->getY() < maps[i].getY() + 500 && player->getY() > maps[i].getY()) 
+		{
+			id = maps[i].getId();
+		}
+	}
 }

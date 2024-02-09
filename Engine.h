@@ -18,6 +18,8 @@ public:
 	sf::RectangleShape rect;
 	Map();
 	int getId();
+	double getX();
+	double getY();
 	void setId(int id);
 	void setXY(int x_, int y_);
 };
@@ -33,10 +35,13 @@ protected:
 	bool invis;
 public:
 	Player();
+	Player(const Player& player);
 	virtual void attack();
 	virtual void movement(sf::Event event, sf::Time deltaTime);
 	virtual void checkPosition();
 	virtual void draw(sf::RenderWindow& window);
+	double getX();
+	double getY();
 	bool CheckWall();
 };
 
@@ -100,7 +105,7 @@ public:
 class Game
 {
 private:
-	Player* player = new PlayerSnake(); //мен€йте на змею, если хотите протестить
+	Player* player = new PlayerUsual(); //мен€йте на змею, если хотите протестить
 	sf::RenderWindow window;
 	sf::RenderWindow TimeWindow;
 	Map* maps = new Map[4];
@@ -109,6 +114,8 @@ private:
 public:
 	void StartGameCycle();
 	void StartTimeCycle();
+	void swapPlayerType();
+	bool isChangedPosition();
 };
 
 
