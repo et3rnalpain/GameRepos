@@ -64,7 +64,7 @@ Player::Player()
 	player_sprite.setPosition(x,y);
 	max_speed = 6;
 	min_speed = 1;
-	acceleration = 3;
+	acceleration = 2;
 	deceleration = 0.98;
 	health = 10;
 	damage = 10;
@@ -85,7 +85,7 @@ Player::Player(double x, double y)
 	player_sprite.setPosition(x,y);
 	max_speed = 6;
 	min_speed = 1;
-	acceleration = 3;
+	acceleration = 2;
 	deceleration = 0.98;
 	health = 10;
 	damage = 10;
@@ -250,6 +250,18 @@ void Game::StartGameCycle()
 		{
 			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
 				window.close();
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+				move_dir.x = 0.6f; move_dir.y = -0.6;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+				move_dir.x = -0.6f; move_dir.y = -0.6;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+				move_dir.x = 0.6f; move_dir.y = 0.6;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+				move_dir.x = -0.6f; move_dir.y = 0.6;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 				move_dir.x = 0; move_dir.y = -1;
