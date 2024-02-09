@@ -56,7 +56,7 @@ Player::Player()
 	x = rand() % 1000;
 	y = rand() % 1000;
 
-	movement_speed = 25;
+	movement_speed = 10;
 	health = 10;
 	damage = 10;
 
@@ -91,8 +91,16 @@ void Player::draw(sf::RenderWindow& window){
 class PlayerUsual;
 void PlayerUsual::movement(sf::Event event)
 {
-	/*x += movement_speed;
-	y += movement_speed;*/
+	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		this->y -= this->movement_speed;
+	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		this->y += this->movement_speed;
+	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		this->x += this->movement_speed;
+	else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		this->x -= this->movement_speed;
+	this->player_shape.setPosition(sf::Vector2f(x, y));
+	this->player_sprite.setPosition(sf::Vector2f(x, y));
 }
 
 class PlayerInvisible;
@@ -136,6 +144,7 @@ void Game::StartGameCycle()
 	sf::Event event;
 	while (window.isOpen())
 	{
+	
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){

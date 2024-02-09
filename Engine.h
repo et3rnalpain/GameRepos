@@ -53,8 +53,8 @@ class PlayerBoss : public Player
 class PlayerSnake : public Player
 {
 private:
-	double snake_move_x[4] = { 0, 0, 0.3, -0.3 };
-	double snake_move_y[4] = { -0.3, 0.3, 0, 0 };
+	double snake_move_x[4] = { 0, 0, 0.1, -0.1 };
+	double snake_move_y[4] = { -0.1, 0.1, 0, 0 };
 	int direction = 3;
 public:
 	void movement(sf::Event event) override;
@@ -64,9 +64,35 @@ public:
 class Game
 {
 private:
-	Player* player = new PlayerSnake(); //мен€йте на змею, если хотите протестить
+	Player* player = new PlayerUsual(); //мен€йте на змею, если хотите протестить
 	sf::RenderWindow window;
 	Map* maps = new Map[4];
 public:
 	void StartGameCycle();
+};
+
+class Buff 
+{
+protected:
+	sf::RectangleShape buff_shape;
+	sf::Texture buff_texture;
+public:
+	Buff();
+	virtual void BuffPlayer(Player& player);
+};
+
+class Health : public Buff 
+{
+private:
+	int bonus = 5;
+public:
+	void BuffPlayer(Player& player) override;
+};
+
+class Damage : public Buff
+{
+private:
+	int bonus = 5;
+public:
+	void BuffPlayer(Player& player) override;
 };
