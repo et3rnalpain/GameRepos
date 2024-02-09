@@ -35,6 +35,7 @@ protected:
 	bool invis;
 public:
 	Player();
+	Player(double x, double y);
 	Player(const Player& player);
 	virtual void attack();
 	virtual void movement(sf::Event event, sf::Time deltaTime);

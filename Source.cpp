@@ -64,10 +64,41 @@ Player::Player()
 	invis = false;
 };
 
+Player::Player(double x, double y)
+{
+	player_texture.loadFromFile("player.jpg");
+	player_texture.setSmooth(true);
+	player_sprite.setTexture(player_texture);
+
+	this->x = x;
+	this->y = y;
+
+	movement_speed = 25;
+	health = 10;
+	damage = 10;
+
+	invis = false;
+}
+
+Player::Player(const Player& player)
+{
+	player_texture.loadFromFile("player.jpg");
+	player_texture.setSmooth(true);
+	player_sprite.setTexture(player_texture);
+
+	this->x = player.x;
+	this->y = player.y;
+	this->movement_speed = player.movement_speed;
+	this->health = player.health;
+	this->damage = player.damage;
+	this->invis = player.invis;
+}
+
 void Player::attack()
 {
 
 };
+
 void Player::movement(sf::Event event, sf::Time deltaTime)
 {
 	if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -93,14 +124,6 @@ bool Player::CheckWall()
 	if ((x + 50 >= 1000) || (x <= 0)) return 0;
 	if ((y + 50 >= 1000) || (y <= 0)) return 0;
 	return 1;
-}
-
-Player::Player(const Player& player) 
-{
-	this->x = player.x;
-	this->y = player.y;
-	this->health = player.health;
-	this->damage = player.damage;
 }
 
 double Player::getX() { return x; }
@@ -151,7 +174,10 @@ void PlayerUsual::movement(sf::Event event, sf::Time deltaTime)
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
 }
 
-class PlayerInvisible;
+class PlayerInvisible
+{
+	PlayerInvisible(double x, double y) : Player(x, y) {}
+};
 
 class PlayerBoss;
 
@@ -325,7 +351,7 @@ int Game::checkCurrId()
 	int id;
 	for (int i = 0; i < 4; i++) 
 	{
-		if (player->getX() < maps[i].getX() + 500 && player->getX() > maps[i].getX() && player->getY() < maps[i].getY() + 500 && player->getY() > maps[i].getY()) 
+		if (player->getX() <= maps[i].getX() + 500 && player->getX() >= maps[i].getX() && player->getY() <= maps[i].getY() + 500 && player->getY() >= maps[i].getY()) 
 		{
 			id = maps[i].getId();
 		}
