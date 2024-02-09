@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-
+/* Карта */
 
 class Map;
 Map::Map()
@@ -47,6 +47,9 @@ void Map::setXY(int x_, int y_)
 
 double Map::getX() { return x; }
 double Map::getY() { return y; }
+
+/* Игрок */
+
 class Player;
 Player::Player()
 {
@@ -54,8 +57,8 @@ Player::Player()
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
 
-	x = rand() % (900 - 100 + 1) + 100;
-	y = rand() % (900 - 100 + 1) + 100;
+	x = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
+	y = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
 	movement_vector.x = 0;
 	movement_vector.y = 0;
 	player_sprite.setPosition(x,y);
@@ -149,8 +152,8 @@ void Player::draw(sf::RenderWindow& window){
 
 bool Player::CheckWall()
 {
-	if ((x + 50 >= 1000) || (x <= 0)) return 0;
-	if ((y + 50 >= 1000) || (y <= 0)) return 0;
+	if (this->getSpriteCenter().x >= SCREEN_WIDTH || this->getSpriteCenter().x <= 0) return 0;
+	if (this->getSpriteCenter().y >= SCREEN_HEIGHT || this->getSpriteCenter().y <= 0) return 0;
 	return 1;
 }
 
@@ -168,13 +171,21 @@ void Player::setXY(double x, double y)
 	this->y = y;
 }
 
-class PlayerUsual;
+sf::Vector2f Player::getSpriteCenter()
+{
+	sf::Vector2f center(this->x + (player_sprite.getTextureRect().width / 2), this->y + (player_sprite.getTextureRect().height / 2));
+	return center;
+}
 
-class PlayerInvisible;
+/* Наследники класса Игрок */
 
-class PlayerBoss;
+class PlayerUsual; //Обычный
 
-class PlayerSnake;
+class PlayerInvisible; //Невидимый
+
+class PlayerBoss; //В зоне с боссом
+
+class PlayerSnake; //Движется змейкой
 void PlayerSnake::movement(double dir_x, double dir_y)
 {
 	if (dir_x == 0.f && dir_y == -1.f)
@@ -193,10 +204,12 @@ void PlayerSnake::checkPosition()
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
 }
 
+/* Игра */
+
 class Game;
 void Game::StartGameCycle()
 {
-	window.create(sf::VideoMode(1000, 1000), "Game");
+	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Game");
 	window.setFramerateLimit(144);
 	int array[4] = { 1,2,3,4 };
 	std::random_shuffle(&array[0], &array[3]);
@@ -211,9 +224,9 @@ void Game::StartGameCycle()
 		else buffs[i] = new Health();
 	}
 	maps[0].setXY(0, 0);
-	maps[1].setXY(500, 0);
-	maps[2].setXY(0, 500);
-	maps[3].setXY(500, 500);
+	maps[1].setXY(SCREEN_WIDTH / 2, 0);
+	maps[2].setXY(0, SCREEN_HEIGHT / 2);
+	maps[3].setXY(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	sf::Event event;
 	sf::Clock clock;
 	sf::Time deltaTime;
@@ -256,7 +269,7 @@ void Game::StartGameCycle()
 		}
 		player->movement(move_dir.x, move_dir.y);
 		player->checkPosition();
-		//if (!player->CheckWall()) window.close();
+		if (!player->CheckWall()) window.close();
 		for (int i = 0; i < 4; i++)
 		{
 			window.draw(maps[i].rect);
@@ -310,6 +323,42 @@ void Game::StartTimeCycle()
 		TimeWindow.display();
 	}
 }
+
+int Game::checkCurrId()
+{
+	int id = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		if (player->getX() <= maps[i].getX() + 500 && player->getX() >= maps[i].getX() && player->getY() <= maps[i].getY() + 500 && player->getY() >= maps[i].getY())
+		{
+			id = maps[i].getId();
+		}
+	}
+	std::cout << player->getX() << " " << player->getY() << std::endl;
+	return id;
+}
+
+void Game::swapPlayerType()
+{
+	double cx = player->getX(), cy = player->getY();
+	int id = checkCurrId();
+	if (currentId != id)
+	{
+		currentId = id;
+		switch (currentId)
+		{
+		case 1: {delete player; player = new PlayerUsual(cx, cy); }break;
+		case 2: {delete player; player = new PlayerSnake(cx, cy); }break;
+		case 3: {delete player; player = new PlayerBoss(cx, cy); }break;
+		case 4: {delete player; player = new PlayerInvisible(cx, cy);  }break;
+		default:
+			break;
+		}
+	}
+}
+
+/* Бонусы */
+
 class Buff;
 class Health;
 class Damage;
@@ -342,6 +391,9 @@ Health::Health()
 	buff_sprite.setScale(sf::Vector2f(0.05f, 0.05f));
 }
 
+/* Таймер */
+
+class Timer;
 void Timer::StartTime()
 {
 	clock.restart();
@@ -358,39 +410,9 @@ int Timer::GetTime()
 	return seconds;
 }
 
-int Game::checkCurrId() 
-{
-	int id = 0;
-	for (int i = 0; i < 4; i++) 
-	{
-		if (player->getX() <= maps[i].getX() + 500 && player->getX() >= maps[i].getX() && player->getY() <= maps[i].getY() + 500 && player->getY() >= maps[i].getY()) 
-		{
-			id = maps[i].getId();
-		}
-	}
-	std::cout << player->getX() << " " << player->getY() << std::endl;
-	return id;
-}
+/* Спрайты */
 
-void Game::swapPlayerType()
-{
-	double cx = player->getX(), cy = player->getY();
-	int id = checkCurrId();
-	if (currentId != id)
-	{
-		currentId = id;
-		switch (currentId)
-		{
-		case 1: {delete player; player = new PlayerUsual(cx, cy); }break;
-		case 2: {delete player; player = new PlayerSnake(cx, cy); }break;
-		case 3: {delete player; player = new PlayerBoss(cx, cy); }break;
-		case 4: {delete player; player = new PlayerInvisible(cx, cy);  }break;
-		default:
-			break;
-		}
-	}
-}
-
+class Gui;
 Gui::Gui(std::string filename, int x, int y)
 {
 	Texture.loadFromFile(filename);

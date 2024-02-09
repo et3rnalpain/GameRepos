@@ -6,7 +6,8 @@
 #include <algorithm>
 
 #define M_PI 3.1415926535
-
+#define SCREEN_WIDTH 1000
+#define SCREEN_HEIGHT 1000
 
 
 class Map //класс карты
@@ -49,6 +50,7 @@ public:
 	bool CheckWall();
 	int getHealth();
 	int getDamage();
+	sf::Vector2f getSpriteCenter();
 };
 
 class PlayerUsual : public Player //обычный игрок
