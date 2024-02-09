@@ -107,6 +107,12 @@ double Player::getX() { return x; }
 
 double Player::getY() { return y; }
 
+void Player::setXY(double x, double y)
+{
+	this->x = x;
+	this->y = y;
+}
+
 class PlayerUsual;
 void PlayerUsual::movement(sf::Event event, sf::Time deltaTime)
 {
@@ -316,7 +322,7 @@ int Timer::GetTime()
 	return seconds;
 }
 
-void Game::swapPlayerType() 
+int Game::checkCurrId() 
 {
 	int id;
 	for (int i = 0; i < 4; i++) 
@@ -324,6 +330,28 @@ void Game::swapPlayerType()
 		if (player->getX() < maps[i].getX() + 500 && player->getX() > maps[i].getX() && player->getY() < maps[i].getY() + 500 && player->getY() > maps[i].getY()) 
 		{
 			id = maps[i].getId();
+		}
+	}
+	return id;
+}
+
+
+
+void Game::swapPlayerType()
+{
+	double cx = player->getX(), cy = player->getY();
+	int id = checkCurrId();
+	if (currentId != id) 
+	{
+		currentId = id;
+		switch (currentId)
+		{
+		case 1: {player = new PlayerUsual(); player->setXY(cx, cy); }break;
+		case 2: {player = new PlayerSnake();player->setXY(cx,cy); }break;
+		case 3: {player = new PlayerBoss();player->setXY(cx,cy); }break;
+		case 4: {player = new PlayerInvisible();player->setXY(cx,cy); }break;
+		default:
+			break;
 		}
 	}
 }

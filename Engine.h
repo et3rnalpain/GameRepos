@@ -42,6 +42,7 @@ public:
 	virtual void draw(sf::RenderWindow& window);
 	double getX();
 	double getY();
+	void setXY(double x, double y);
 	bool CheckWall();
 };
 
@@ -66,7 +67,7 @@ class PlayerSnake : public Player
 private:
 	double snake_move_x[4] = { 0, 0, 2, -2 };
 	double snake_move_y[4] = { -2, 2, 0, 0 };
-	int direction = 3;
+	int direction = 0;
 public:
 	void movement(sf::Event event,sf::Time deltaTime) override;
 	void checkPosition() override;
@@ -111,11 +112,12 @@ private:
 	Map* maps = new Map[4];
 	int TimeInSec = 0;
 	Buff* buffs[15];
+	int currentId;
 public:
 	void StartGameCycle();
 	void StartTimeCycle();
+	int checkCurrId();
 	void swapPlayerType();
-	bool isChangedPosition();
 };
 
 
