@@ -107,6 +107,10 @@ double Player::getX() { return x; }
 
 double Player::getY() { return y; }
 
+int Player::getHealth() { return health; }
+
+int Player::getDamage() { return damage; }
+
 class PlayerUsual;
 void PlayerUsual::movement(sf::Event event, sf::Time deltaTime)
 {
@@ -192,7 +196,9 @@ void Game::StartGameCycle()
 	timer.StartTime();
 
 	Gui sword("sword.png", 0, 900);
+	TextGui swordnumb(player->getDamage(), 40, 100, 900);
 	Gui health("heart.png", 150, 900);
+	TextGui healthnumb(player->getHealth(), 40, 250, 900);
 
 	window.setVerticalSyncEnabled(true);
 	while (window.isOpen())
@@ -218,7 +224,9 @@ void Game::StartGameCycle()
 		player->checkPosition();
 		player->draw(window);
 		sword.draw(window);
+		swordnumb.draw(window);
 		health.draw(window);
+		healthnumb.draw(window);
 		window.display();
 		deltaTime = clock.getElapsedTime();
 
@@ -235,24 +243,14 @@ void Game::StartTimeCycle()
 	std::string Mess = "Your time is ";
 	std::string StTime;
 
-	font.loadFromFile("arial.ttf");
+	TimeWindow.create(sf::VideoMode(w, h), "Time");
+
 	StTime = std::to_string(TimeInSec);
 	Mess += StTime;
 	Mess += " sec.";
 
-	sf::Text text(Mess, font, 40);
-	text.setFillColor(sf::Color::Red);
-	text.setPosition(w/2-150, h/2-40);
-
-	TimeWindow.create(sf::VideoMode(w, h), "Time");
-	TimeWindow.clear(sf::Color::Yellow);
-
-	sf::Texture texture;
-	texture.loadFromFile("BackGroundTime.png");
-
-	sf::Sprite sprite;
-	sprite.setTexture(texture);
-	sprite.setPosition(0, 0);
+	TextGui text(Mess, 40, w / 2 - 150, h / 2 - 40);
+	Gui BackGround("BackGroundTime.png", 0, 0);
 
 	while (TimeWindow.isOpen())
 	{
@@ -263,8 +261,8 @@ void Game::StartTimeCycle()
 				TimeWindow.close();
 			}
 		}
-		TimeWindow.draw(sprite);
-		TimeWindow.draw(text);
+		BackGround.draw(TimeWindow);
+		text.draw(TimeWindow);
 		TimeWindow.display();
 	}
 }
@@ -326,4 +324,42 @@ void Game::swapPlayerType()
 			id = maps[i].getId();
 		}
 	}
+}
+
+Gui::Gui(std::string filename, int x, int y)
+{
+	Texture.loadFromFile(filename);
+	Sprite.setTexture(Texture);
+	Sprite.setPosition(x, y);
+}
+
+void Gui::draw(sf::RenderWindow& window)
+{
+	window.draw(Sprite);
+}
+
+TextGui::TextGui(std::string message, int size, int x, int y)
+{
+	font.loadFromFile("arial.ttf");
+	text.setFont(font);
+	text.setString(message);
+	text.setCharacterSize(size);
+	text.setPosition(x, y);
+	text.setFillColor(sf::Color::Red);
+}
+
+TextGui::TextGui(int message, int size, int x, int y)
+{
+	std::string mess = std::to_string(message);
+	font.loadFromFile("arial.ttf");
+	text.setFont(font);
+	text.setString(mess);
+	text.setCharacterSize(size);
+	text.setPosition(x, y);
+	text.setFillColor(sf::Color::Red);
+}
+
+void TextGui::draw(sf::RenderWindow& window)
+{
+	window.draw(text);
 }

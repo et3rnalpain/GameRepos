@@ -43,6 +43,8 @@ public:
 	double getX();
 	double getY();
 	bool CheckWall();
+	int getHealth();
+	int getDamage();
 };
 
 class PlayerUsual : public Player
@@ -136,16 +138,8 @@ private:
 	sf::Texture Texture;
 	sf::Sprite Sprite;
 public:
-	Gui(std::string filename, int x, int y)
-	{
-		Texture.loadFromFile(filename);
-		Sprite.setTexture(Texture);
-		Sprite.setPosition(x, y);
-	}
-	void draw(sf::RenderWindow& window)
-	{
-		window.draw(Sprite);
-	}
+	Gui(std::string filename, int x, int y);
+	void draw(sf::RenderWindow& window);
 };
 
 class TextGui
@@ -154,6 +148,8 @@ private:
 	sf::Font font;
 	sf::Text text;
 public:
-
+	TextGui(std::string message, int size, int x, int y);
+	TextGui(int message, int size, int x, int y);
+	void draw(sf::RenderWindow& window);
 };
 
