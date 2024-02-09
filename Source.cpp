@@ -157,8 +157,8 @@ void Game::StartGameCycle()
 	for (int i = 0; i < 15; i++) 
 	{
 		int rnd = rand() % 2;
-		if (rnd == 0) buffs[i] = Damage();
-		else buffs[i] = Health();
+		if (rnd == 0) buffs[i] = new Damage();
+		else buffs[i] = new Health();
 	}
 	maps[0].setXY(0, 0);
 	maps[1].setXY(500, 0);
@@ -187,9 +187,9 @@ void Game::StartGameCycle()
 		{
 			window.draw(maps[i].rect);
 		}
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 15; i++)
 		{
-			buffs[i].draw(window);
+			buffs[i]->draw(window);
 		}
 		player->checkPosition();
 		player->draw(window);
@@ -245,7 +245,7 @@ Buff::Buff()
 
 void Buff::draw(sf::RenderWindow& window)
 {
-	window.draw(this->buff_sprite);
+	window.draw(buff_sprite);
 }
 
 Damage::Damage() 

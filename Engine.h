@@ -104,8 +104,7 @@ private:
 	sf::RenderWindow TimeWindow;
 	Map* maps = new Map[4];
 	int TimeInSec = 0;
-	//Damage dbuffs[10];
-	//Health hbuffs[10];
+	Buff* buffs[15];
 public:
 	void StartGameCycle();
 	void StartTimeCycle();
