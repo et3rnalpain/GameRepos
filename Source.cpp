@@ -197,10 +197,41 @@ void Game::StartGameCycle()
 		deltaTime = clock.getElapsedTime();
 
 	}
-
 	timer.EndTime();
-	std::cout << timer.GetTime();
+	this->TimeInSec = timer.GetTime();
 
+}
+
+void Game::StartTimeCycle()
+{
+	int w = 500, h = 200;
+	sf::Event event; sf::Font font;
+	std::string Mess = "Your time is ";
+	std::string StTime;
+
+	font.loadFromFile("arial.ttf");
+	StTime = std::to_string(TimeInSec);
+	Mess += StTime;
+	Mess += " sec.";
+
+	sf::Text text(Mess, font, 40);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition(w/2-150, h/2-40);
+
+	TimeWindow.create(sf::VideoMode(w, h), "Time");
+
+	while (TimeWindow.isOpen())
+	{
+		while (TimeWindow.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			{
+				TimeWindow.close();
+			}
+		}
+		TimeWindow.draw(text);
+		TimeWindow.display();
+	}
 }
 class Buff;
 class Health;

@@ -101,10 +101,14 @@ class Game
 private:
 	Player* player = new PlayerSnake(); //мен€йте на змею, если хотите протестить
 	sf::RenderWindow window;
+	sf::RenderWindow TimeWindow;
 	Map* maps = new Map[4];
-	Buff* buffs = new Buff[15];
+	int TimeInSec = 0;
+	//Damage dbuffs[10];
+	//Health hbuffs[10];
 public:
 	void StartGameCycle();
+	void StartTimeCycle();
 };
 
 
