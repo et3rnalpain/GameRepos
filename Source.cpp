@@ -313,7 +313,7 @@ void Buff::draw(sf::RenderWindow& window)
 
 Damage::Damage() 
 {
-	buff_texture.loadFromFile("buff1.jpg");
+	buff_texture.loadFromFile("buff1.png");
 	buff_texture.setSmooth(true);
 	buff_sprite.setTexture(buff_texture);
 	buff_sprite.setPosition(sf::Vector2f(x, y));
