@@ -161,6 +161,10 @@ void Game::StartGameCycle()
 	sf::Event event;
 	sf::Clock clock;
 	sf::Time deltaTime;
+
+	Timer timer;
+	timer.StartTime();
+
 	window.setVerticalSyncEnabled(true);
 	while (window.isOpen())
 	{
@@ -187,6 +191,10 @@ void Game::StartGameCycle()
 		deltaTime = clock.getElapsedTime();
 
 	}
+
+	timer.EndTime();
+	std::cout << timer.GetTime();
+
 }
 class Buff;
 class Health;
@@ -201,4 +209,21 @@ Buff::Buff(bool type)
 void Buff::draw(sf::RenderWindow& window)
 {
 	window.draw(this->buff_sprite);
+}
+
+
+void Timer::StartTime()
+{
+	clock.restart();
+	seconds = 0;
+}
+
+void Timer::EndTime()
+{
+	seconds = static_cast<unsigned int>(clock.getElapsedTime().asSeconds());
+}
+
+int Timer::GetTime()
+{
+	return seconds;
 }

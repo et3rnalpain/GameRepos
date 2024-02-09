@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <ctime>
+#include <iostream>
 #include <algorithm>
 
 #define M_PI 3.1415926535
@@ -103,5 +104,17 @@ private:
 	//Health hbuffs[10];
 public:
 	void StartGameCycle();
+};
+
+
+class Timer
+{
+private:
+	sf::Clock clock;
+	unsigned int seconds;
+public:
+	void StartTime();
+	void EndTime();
+	int GetTime();
 };
 
