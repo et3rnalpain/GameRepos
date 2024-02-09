@@ -159,7 +159,7 @@ class PlayerSnake : public Player //игрок который ходит как змеЮКА СУКА!
 private:
 	double snake_move_x[4] = { 0, 0, 2, -2 };
 	double snake_move_y[4] = { -2, 2, 0, 0 };
-	int direction = 0;
+	int direction = 1;
 public:
 	PlayerSnake() : Player() 
 	{
