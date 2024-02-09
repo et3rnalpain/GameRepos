@@ -48,7 +48,7 @@ void Map::setXY(int x_, int y_)
 class Player;
 Player::Player()
 {
-	player_shape.setSize(sf::Vector2f(100, 100));
+	player_shape.setSize(sf::Vector2f(50, 50));
 	player_texture.loadFromFile("player.jpg");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);

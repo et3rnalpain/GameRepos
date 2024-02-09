@@ -53,8 +53,8 @@ class PlayerBoss : public Player
 class PlayerSnake : public Player
 {
 private:
-	int snake_move_x[4] = { 0, 0, 1, -1 };
-	int snake_move_y[4] = { -1, 1, 0, 0 };
+	double snake_move_x[4] = { 0, 0, 0.3, -0.3 };
+	double snake_move_y[4] = { -0.3, 0.3, 0, 0 };
 	int direction = 3;
 public:
 	void movement(sf::Event event) override;
@@ -64,7 +64,7 @@ public:
 class Game
 {
 private:
-	Player* player = new Player(); //мен€йте на змею, если хотите протестить
+	Player* player = new PlayerSnake(); //мен€йте на змею, если хотите протестить
 	sf::RenderWindow window;
 	Map* maps = new Map[4];
 public:
