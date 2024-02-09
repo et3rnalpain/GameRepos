@@ -8,7 +8,7 @@
 
 
 
-class Map
+class Map //класс карты
 {
 private:
 	int id;
@@ -17,7 +17,7 @@ private:
 public:
 	sf::RectangleShape rect;
 	Map();
-	int getId();
+	int getId(); //получить айди пол€ (1-4)
 	double getX();
 	double getY();
 	void setId(int id);
@@ -25,7 +25,7 @@ public:
 };
 
 
-class Player
+class Player //класс игрока абстрактный
 {
 protected:
 
@@ -49,7 +49,7 @@ public:
 	int getDamage();
 };
 
-class PlayerUsual : public Player
+class PlayerUsual : public Player //обычный игрок
 {
 public:
 	PlayerUsual() : Player()
@@ -82,10 +82,9 @@ public:
 
 		invis = false;
 	};
-	void movement(sf::Event event, sf::Time deltaTime);
 };
 
-class PlayerInvisible : public Player
+class PlayerInvisible : public Player //невидимый игрок
 {
 public:
 	PlayerInvisible() : Player()
@@ -120,7 +119,7 @@ public:
 	};
 };
 
-class PlayerBoss : public Player
+class PlayerBoss : public Player //игрок на поле босса
 {
 public:
 	PlayerBoss() : Player()
@@ -155,7 +154,7 @@ public:
 	}
 };
 
-class PlayerSnake : public Player
+class PlayerSnake : public Player //игрок который ходит как змеё ј —” ј!
 {
 private:
 	double snake_move_x[4] = { 0, 0, 2, -2 };
@@ -196,7 +195,7 @@ public:
 	void checkPosition() override;
 }; 
 
-class Buff
+class Buff //класс зелек (увеличение хп и урона)
 {
 protected:
 	sf::Texture buff_texture;
@@ -226,7 +225,7 @@ public:
 	//void BuffPlayer(Player& player) override;
 };
 
-class Game
+class Game //класс игры (тут вс€ отрисовка и тд)
 {
 private:
 	Player* player = new Player(); //мен€йте на змею, если хотите протестить
@@ -244,7 +243,7 @@ public:
 };
 
 
-class Timer
+class Timer //класс секундомера
 {
 private:
 	sf::Clock clock;
@@ -255,7 +254,7 @@ public:
 	int GetTime();
 };
 
-class Gui
+class Gui //класс дл€ создани€ и отображени€ спрайта
 {
 private:
 	sf::Texture Texture;
@@ -269,7 +268,7 @@ public:
 	void draw(sf::RenderWindow& window);
 };
 
-class TextGui
+class TextGui //класс дл€ создани€ и отображени€ текста
 {
 private:
 	sf::Font font;
