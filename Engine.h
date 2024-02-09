@@ -228,7 +228,7 @@ public:
 class Game //класс игры (тут вс€ отрисовка и тд)
 {
 private:
-	Player* player = new Player(); //мен€йте на змею, если хотите протестить
+	Player* player = new Player();
 	sf::RenderWindow window;
 	sf::RenderWindow TimeWindow;
 	Map* maps = new Map[4];
