@@ -64,7 +64,7 @@ Player::Player()
 	invis = false;
 };
 
-Player::Player(double x, double y)
+Player::Player(double x, double y) 
 {
 	player_texture.loadFromFile("player.jpg");
 	player_texture.setSmooth(true);
