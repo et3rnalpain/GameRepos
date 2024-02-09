@@ -123,3 +123,30 @@ public:
 	int GetTime();
 };
 
+class Gui
+{
+private:
+	sf::Texture Texture;
+	sf::Sprite Sprite;
+public:
+	Gui(std::string filename, int x, int y)
+	{
+		Texture.loadFromFile(filename);
+		Sprite.setTexture(Texture);
+		Sprite.setPosition(x, y);
+	}
+	void draw(sf::RenderWindow& window)
+	{
+		window.draw(Sprite);
+	}
+};
+
+class TextGui
+{
+private:
+	sf::Font font;
+	sf::Text text;
+public:
+
+};
+
