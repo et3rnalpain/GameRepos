@@ -142,6 +142,10 @@ private:
 	sf::Sprite Sprite;
 public:
 	Gui(std::string filename, int x, int y);
+	void setPosition(int x, int y)
+	{
+		Sprite.setPosition(sf::Vector2f(x, y));
+	}
 	void draw(sf::RenderWindow& window);
 };
 
@@ -155,6 +159,10 @@ public:
 	TextGui(int message, int size, int x, int y);
 	void setstring(std::string message);
 	void setstring(int message);
+	void setPosition(int x, int y)
+	{
+		text.setPosition(sf::Vector2f(x, y));
+	}
 	void draw(sf::RenderWindow& window);
 };
 
