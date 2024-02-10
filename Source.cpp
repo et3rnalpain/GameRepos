@@ -519,6 +519,7 @@ void Buff::setPosition(double x, double y)
 {
 	this->x = x;
 	this->y = y;
+	buff_sprite.setPosition(x, y);
 }
 
 double Buff::getX() { return x; }
