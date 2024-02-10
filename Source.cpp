@@ -202,6 +202,75 @@ void PlayerSnake::checkPosition()
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
 }
 
+/* Пуля */
+class Bullet;
+Bullet::Bullet()
+{
+	bullet_texture.loadFromFile("pulya.jpg");
+	bullet_texture.setSmooth(true);
+	bullet_sprite.setTexture(bullet_texture);
+
+	this->x = 0;
+	this->y = 0;
+	this->bullet_vector.x = 0;
+	this->bullet_vector.y = 0;
+	bullet_sprite.setPosition(this->x, this->y);
+	this->max_speed = 500;
+	this->min_speed = 1;
+	this->acceleration = 1.6;
+	
+	isAlive = false;
+}
+
+Bullet::Bullet(double dir_x, double dir_y, double player_x, double player_y)
+{
+	bullet_texture.loadFromFile("pulya.jpg");
+	bullet_texture.setSmooth(true);
+	bullet_sprite.setTexture(bullet_texture);
+
+	this->x = player_x;
+	this->y = player_y;
+	this->bullet_vector.x = dir_x;
+	this->bullet_vector.y = dir_y;
+	bullet_sprite.setPosition(this->x, this->y);
+	this->max_speed = 500;
+	this->min_speed = 1;
+	this->acceleration = 1.6;
+	
+	isAlive = true;
+}
+
+void Bullet::movement()
+{
+	if (isAlive) {
+		this->bullet_vector.x *= this->acceleration;
+		this->bullet_vector.y *= this->acceleration;
+
+		this->x += this->bullet_vector.x;
+		this->y += this->bullet_vector.y;
+	}
+}
+
+void Bullet::checkPosition()
+{
+	if (std::abs(this->bullet_vector.x) > this->max_speed)
+		isAlive = false;
+	if (std::abs(this->bullet_vector.y) > this->max_speed)
+		isAlive = false;
+	bullet_sprite.setPosition(x, y);
+}
+
+void Bullet::draw(sf::RenderWindow& window)
+{
+	if (isAlive)
+		window.draw(bullet_sprite);
+}
+
+bool Bullet::isBulletAlive()
+{
+	return this->isAlive;
+}
+
 /* Игра */
 
 class Game;
@@ -238,6 +307,7 @@ void Game::StartGameCycle()
 	TextGui healthnumb(player->getHealth(), 40, 250, 900);
 
 	sf::Vector2f move_dir = sf::Vector2f(0.f, 0.f);
+	sf::Vector2f tmp_dir = sf::Vector2f(0.f, -1.f);
 
 	/*Music fon("fon.wav", 50, 1);
 	fon.play();*/
@@ -253,35 +323,44 @@ void Game::StartGameCycle()
 				window.close();
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-				move_dir.x = 0.6f; move_dir.y = -0.6;
+				move_dir.x = 0.6f; move_dir.y = -0.6; tmp_dir = move_dir;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-				move_dir.x = -0.6f; move_dir.y = -0.6;
+				move_dir.x = -0.6f; move_dir.y = -0.6; tmp_dir = move_dir;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-				move_dir.x = 0.6f; move_dir.y = 0.6;
+				move_dir.x = 0.6f; move_dir.y = 0.6; tmp_dir = move_dir;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-				move_dir.x = -0.6f; move_dir.y = 0.6;
+				move_dir.x = -0.6f; move_dir.y = 0.6; tmp_dir = move_dir;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-				move_dir.x = 0; move_dir.y = -1;
+				move_dir.x = 0; move_dir.y = -1; tmp_dir = move_dir;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-				move_dir.x = 0; move_dir.y = 1;
+				move_dir.x = 0; move_dir.y = 1; tmp_dir = move_dir;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-				move_dir.x = 1; move_dir.y = 0;
+				move_dir.x = 1; move_dir.y = 0; tmp_dir = move_dir;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-				move_dir.x = -1; move_dir.y = 0;
+				move_dir.x = -1; move_dir.y = 0; tmp_dir = move_dir;
 			}
 			else {
 				move_dir.x = 0; move_dir.y = 0;
 			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->checkCurrId() == 4) {
+				if (!bullet->isBulletAlive()) {
+					bullet = new Bullet(tmp_dir.x, tmp_dir.y, player->getSpriteCenter().x, player->getSpriteCenter().y);
+				}
+			}
 		}
+		
 		player->movement(move_dir.x, move_dir.y);
 		player->checkPosition();
+		bullet->movement();
+		bullet->checkPosition();
 		if (!player->CheckWall()) window.close();
 		for (int i = 0; i < 4; i++)
 		{
@@ -292,11 +371,12 @@ void Game::StartGameCycle()
 			buffs[i]->draw(window);
 		}
 		player->checkPosition();
-		player->draw(window);
 		sword.draw(window);
 		swordnumb.draw(window);
 		health.draw(window);
 		healthnumb.draw(window);
+		bullet->draw(window);
+		player->draw(window);
 		window.display();
 		deltaTime = clock.getElapsedTime();
 

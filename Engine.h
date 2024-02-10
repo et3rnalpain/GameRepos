@@ -31,7 +31,6 @@ public:
 class Player //класс игрока абстрактный
 {
 protected:
-
 	sf::Texture player_texture;
 	sf::Sprite player_sprite;
 	sf::Vector2f movement_vector;
@@ -88,6 +87,23 @@ public:
 	void checkPosition() override;
 }; 
 
+class Bullet
+{
+private:
+	sf::Texture bullet_texture;
+	sf::Sprite bullet_sprite;
+	sf::Vector2f bullet_vector;
+	double x, y, acceleration, max_speed, min_speed;
+	bool isAlive;
+public:
+	Bullet();
+	Bullet(double dir_x, double dir_y, double player_x, double player_y);
+	void movement();
+	void checkPosition();
+	void draw(sf::RenderWindow& window);
+	bool isBulletAlive();
+};
+
 class Buff //класс зелек (увеличение хп и урона)
 {
 protected:
@@ -127,6 +143,7 @@ private:
 	Map* maps = new Map[4];
 	int TimeInSec = 0;
 	Buff* buffs[15];
+	Bullet* bullet = new Bullet();
 	int currentId;
 public:
 	void StartGameCycle();
