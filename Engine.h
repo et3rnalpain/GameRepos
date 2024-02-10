@@ -15,7 +15,7 @@ class Map //класс карты
 {
 private:
 	int id;
-	double x, y, h = 500, w = 500;
+	double x, y, h = (SCREEN_HEIGHT / 2), w = (SCREEN_WIDTH / 2);
 	sf::Color color;
 public:
 	sf::RectangleShape rect;
@@ -26,66 +26,6 @@ public:
 	void setId(int id);
 	void setXY(int x_, int y_);
 };
-
-
-class Player //класс игрока абстрактный
-{
-protected:
-	sf::Texture player_texture;
-	sf::Sprite player_sprite;
-	sf::Vector2f movement_vector;
-	double x, y,acceleration, deceleration, max_speed, min_speed, health, damage;
-	bool invis;
-public:
-	Player();
-	Player(double x, double y);
-	Player(const Player& player);
-	virtual void attack();
-	virtual void movement(double dir_x, double dir_y);
-	virtual void checkPosition();
-	virtual void draw(sf::RenderWindow& window);
-	double getX();
-	double getY();
-	void setXY(double x, double y);
-	bool CheckWall();
-	int getHealth();
-	int getDamage();
-	sf::Vector2f getSpriteCenter();
-};
-
-class PlayerUsual : public Player //обычный игрок
-{
-public:
-	PlayerUsual() : Player() {}
-	PlayerUsual(double x, double y) : Player(x, y) {}
-};
-
-class PlayerInvisible : public Player //невидимый игрок
-{
-public:
-	PlayerInvisible() : Player() {}
-	PlayerInvisible(double x, double y) : Player(x,y) {}
-};
-
-class PlayerBoss : public Player //игрок на поле босса
-{
-public:
-	PlayerBoss() : Player() {}
-	PlayerBoss(double x, double y) : Player(x, y) {}
-};
-
-class PlayerSnake : public Player //игрок который ходит как змеЮКА СУКА!
-{
-private:
-	double snake_move_x[4] = { 0, 0, 2, -2 };
-	double snake_move_y[4] = { -2, 2, 0, 0 };
-	int direction = 1;
-public:
-	PlayerSnake() : Player() {}
-	PlayerSnake(double x, double y) : Player(x, y) {}
-	void movement(double dir_x, double dir_y) override;
-	void checkPosition() override;
-}; 
 
 class Bullet
 {
@@ -103,6 +43,70 @@ public:
 	void draw(sf::RenderWindow& window);
 	bool isBulletAlive();
 };
+
+class Player //класс игрока абстрактный
+{
+protected:
+	sf::Texture player_texture;
+	sf::Sprite player_sprite;
+	sf::Vector2f movement_vector;
+	double x, y,acceleration, deceleration, max_speed, min_speed, health, damage;
+	bool invis;
+public:
+	Player();
+	Player(double x, double y);
+	Player(const Player& player);
+	virtual void attack(Bullet* bullet, double dir_x, double dir_y, double player_x, double player_y);
+	virtual void movement(double dir_x, double dir_y);
+	virtual void checkPosition();
+	virtual void draw(sf::RenderWindow& window);
+	double getX();
+	double getY();
+	void setXY(double x, double y);
+	bool CheckWall();
+	int getHealth();
+	int getDamage();
+	sf::Vector2f getSpriteCenter();
+	int getDirection();
+	virtual void setDirection(int dir);
+};
+
+class PlayerUsual : public Player //обычный игрок
+{
+public:
+	PlayerUsual() : Player() {}
+	PlayerUsual(double x, double y) : Player(x, y) {}
+};
+
+class PlayerInvisible : public Player //невидимый игрок
+{
+public:
+	PlayerInvisible() : Player() {}
+	PlayerInvisible(double x, double y) : Player(x,y) {}
+	void draw(sf::RenderWindow& window) override;
+};
+
+class PlayerBoss : public Player //игрок на поле босса
+{
+public:
+	PlayerBoss() : Player() {}
+	PlayerBoss(double x, double y) : Player(x, y) {}
+	void attack(Bullet* bullet, double dir_x, double dir_y, double player_x, double player_y) override;
+};
+
+class PlayerSnake : public Player //игрок который ходит как змеЮКА СУКА!
+{
+private:
+	double snake_move_x[4] = { 0, 0, 5, -5 };
+	double snake_move_y[4] = { -5, 5, 0, 0 };
+	int dir = 1;
+public:
+	PlayerSnake() : Player() {}
+	PlayerSnake(double x, double y) : Player(x, y) {}
+	void movement(double dir_x, double dir_y) override;
+	void checkPosition() override;
+	void setDirection(int dir) override;
+}; 
 
 class Buff //класс зелек (увеличение хп и урона)
 {

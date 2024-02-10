@@ -65,7 +65,7 @@ Player::Player()
 	max_speed = 6;
 	min_speed = 1;
 	acceleration = 2;
-	deceleration = 0.98;
+	deceleration = 0.94;
 	health = 10;
 	damage = 10;
 
@@ -77,7 +77,6 @@ Player::Player(double x, double y)
 	player_texture.loadFromFile("player.jpg");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
-
 	this->x = x;
 	this->y = y;
 	movement_vector.x = 0;
@@ -86,7 +85,7 @@ Player::Player(double x, double y)
 	max_speed = 6;
 	min_speed = 1;
 	acceleration = 2;
-	deceleration = 0.98;
+	deceleration = 0.94;
 	health = 10;
 	damage = 10;
 
@@ -98,7 +97,6 @@ Player::Player(const Player& player)
 	player_texture.loadFromFile("player.jpg");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
-
 	this->x = player.x;
 	this->y = player.y;
 	this->movement_vector = player.movement_vector;
@@ -113,10 +111,7 @@ Player::Player(const Player& player)
 	this->invis = player.invis;
 }
 
-void Player::attack()
-{
-
-};
+void Player::attack(Bullet* bullet, double dir_x, double dir_y, double player_x, double player_y) {};
 
 void Player::movement(double direction_x, double direction_y)
 {
@@ -175,31 +170,57 @@ sf::Vector2f Player::getSpriteCenter()
 	return center;
 }
 
+int Player::getDirection()
+{
+	if (this->movement_vector.x == 0 && this->movement_vector.y < 0)
+		return 1;
+	else if (this->movement_vector.x == 0 && this->movement_vector.y > 0)
+		return 2;
+	else if (this->movement_vector.x > 0 && this->movement_vector.y == 0)
+		return 3;
+	else if (this->movement_vector.x < 0 && this->movement_vector.y == 0)
+		return 4;
+	else return 1;
+}
+
+void Player::setDirection(int dir) {};
+
 /* Наследники класса Игрок */
 
 class PlayerUsual; //Обычный
 
 class PlayerInvisible; //Невидимый
+void PlayerInvisible::draw(sf::RenderWindow& window) {};
 
 class PlayerBoss; //В зоне с боссом
+void PlayerBoss::attack(Bullet* bullet, double dir_x, double dir_y, double player_x, double player_y)
+{
+	if (!bullet->isBulletAlive()) {
+		bullet = new Bullet(dir_x, dir_y, player_x, player_y);
+	}
+}
 
 class PlayerSnake; //Движется змейкой
 void PlayerSnake::movement(double dir_x, double dir_y)
 {
 	if (dir_x == 0.f && dir_y == -1.f)
-		this->direction = 1;
+		this->dir = 1;
 	else if (dir_x == 0.f && dir_y == 1.f)
-		this->direction = 2;
+		this->dir = 2;
 	else if (dir_x == 1.f && dir_y == 0.f)
-		this->direction = 3;
+		this->dir = 3;
 	else if (dir_x == -1.f && dir_y == 0.f)
-		this->direction = 4;
+		this->dir = 4;
 }
 void PlayerSnake::checkPosition()
 {
-	this->x += this->snake_move_x[this->direction - 1];
-	this->y += this->snake_move_y[this->direction - 1];
+	this->x += this->snake_move_x[this->dir - 1];
+	this->y += this->snake_move_y[this->dir - 1];
 	this->player_sprite.setPosition(sf::Vector2f(x, y));
+}
+
+void PlayerSnake::setDirection(int dir) {
+	this->dir = dir;
 }
 
 /* Пуля */
@@ -350,7 +371,8 @@ void Game::StartGameCycle()
 				move_dir.x = 0; move_dir.y = 0;
 			}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->checkCurrId() == 4) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->checkCurrId() == 1) {
+				/*player->attack(bullet, tmp_dir.x, tmp_dir.y, player->getSpriteCenter().x, player->getSpriteCenter().y);*/
 				if (!bullet->isBulletAlive()) {
 					bullet = new Bullet(tmp_dir.x, tmp_dir.y, player->getSpriteCenter().x, player->getSpriteCenter().y);
 				}
@@ -370,7 +392,6 @@ void Game::StartGameCycle()
 		{
 			buffs[i]->draw(window);
 		}
-		player->checkPosition();
 		sword.draw(window);
 		swordnumb.draw(window);
 		health.draw(window);
@@ -422,7 +443,7 @@ int Game::checkCurrId()
 	int id = 0;
 	for (int i = 0; i < 4; i++)
 	{
-		if (player->getSpriteCenter().x <= maps[i].getX() + 500 && player->getSpriteCenter().x >= maps[i].getX() && player->getSpriteCenter().y <= maps[i].getY() + 500 && player->getSpriteCenter().y >= maps[i].getY())
+		if (player->getSpriteCenter().x <= maps[i].getX() + SCREEN_WIDTH / 2 && player->getSpriteCenter().x >= maps[i].getX() && player->getSpriteCenter().y <= maps[i].getY() + SCREEN_HEIGHT / 2 && player->getSpriteCenter().y >= maps[i].getY())
 		{
 			id = maps[i].getId();
 		}
@@ -435,15 +456,16 @@ void Game::swapPlayerType()
 {
 	double cx = player->getX(), cy = player->getY();
 	int id = checkCurrId();
+	int dir = player->getDirection();
 	if (currentId != id)
 	{
 		currentId = id;
 		switch (currentId)
 		{
 		case 1: {delete player; player = new PlayerUsual(cx, cy); }break;
-		case 2: {delete player; player = new PlayerSnake(cx, cy); }break;
+		case 2: {delete player; player = new PlayerSnake(cx, cy); player->setDirection(dir); }break;
 		case 3: {delete player; player = new PlayerBoss(cx, cy); }break;
-		case 4: {delete player; player = new PlayerInvisible(cx, cy);  }break;
+		case 4: {delete player; player = new PlayerInvisible(cx, cy); }break;
 		default:
 			break;
 		}
