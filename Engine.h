@@ -61,6 +61,8 @@ public:
 	void checkPosition();
 	void draw(sf::RenderWindow& window);
 	bool isBulletAlive();
+	double getX();
+	double getY();
 };
 
 class Player //класс игрока абстрактный
@@ -73,35 +75,39 @@ protected:
 	bool invis;
 public:
 	Player();
-	Player(double x, double y);
+	Player(double x, double y, double health, double damage);
 	Player(const Player& player);
+
 	virtual void attack(Bullet* bullet, double dir_x, double dir_y, double player_x, double player_y);
 	virtual void movement(double dir_x, double dir_y);
 	virtual void checkPosition();
 	virtual void draw(sf::RenderWindow& window);
+	virtual void setDirection(int dir);
+
+	void playerTookDamage();
+	void setXY(double x, double y);
 	double getX();
 	double getY();
-	void setXY(double x, double y);
-	bool CheckWall();
 	int getHealth();
 	int getDamage();
-	sf::Vector2f getSpriteCenter();
 	int getDirection();
-	virtual void setDirection(int dir);
+	sf::Vector2f getSpriteCenter();
+
+	bool CheckWall();
 };
 
 class PlayerUsual : public Player //обычный игрок
 {
 public:
 	PlayerUsual() : Player() {}
-	PlayerUsual(double x, double y) : Player(x, y) {}
+	PlayerUsual(double x, double y, double health, double damage) : Player(x, y, health, damage) {}
 };
 
 class PlayerInvisible : public Player //невидимый игрок
 {
 public:
 	PlayerInvisible() : Player() {}
-	PlayerInvisible(double x, double y) : Player(x,y) {}
+	PlayerInvisible(double x, double y, double health, double damage) : Player(x, y, health, damage) {}
 	void draw(sf::RenderWindow& window) override;
 };
 
@@ -109,7 +115,7 @@ class PlayerBoss : public Player //игрок на поле босса
 {
 public:
 	PlayerBoss() : Player() {}
-	PlayerBoss(double x, double y) : Player(x, y) {}
+	PlayerBoss(double x, double y, double health, double damage) : Player(x, y, health, damage) {}
 	void attack(Bullet* bullet, double dir_x, double dir_y, double player_x, double player_y) override;
 };
 
@@ -121,11 +127,37 @@ private:
 	int dir = 1;
 public:
 	PlayerSnake() : Player() {}
-	PlayerSnake(double x, double y) : Player(x, y) {}
+	PlayerSnake(double x, double y, double health, double damage) : Player(x, y, health, damage) {}
 	void movement(double dir_x, double dir_y) override;
 	void checkPosition() override;
 	void setDirection(int dir) override;
 }; 
+
+/* ћоб */
+
+class Mob
+{
+protected:
+	sf::Texture mob_texture;
+	sf::Sprite mob_sprite;
+	sf::Vector2f movement_vector;
+	double x, y, health, damage, acceleration;
+	bool alive;
+public:
+	Mob();
+	Mob(double x, double y);
+	void movement();
+	void updateCondition(Player* p, Bullet* b);
+	void draw(sf::RenderWindow& window);
+	double getX();
+	double getY();
+	void setXY(double x, double y);
+	bool isHit();
+	bool checkWall();
+	int getHealth();
+	int getDamage();
+	sf::Vector2f getSpriteCenter();
+};
 
 class Buff //класс зелек (увеличение хп и урона)
 {
@@ -170,6 +202,7 @@ private:
 	int TimeInSec = 0;
 	Buff* buffs[15];
 	Bullet* bullet = new Bullet();
+	Mob* mob = new Mob();
 	int currentId;
 public:
 	void StartGameCycle();
