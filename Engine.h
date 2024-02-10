@@ -118,6 +118,9 @@ public:
 	Buff();
 	//virtual void BuffPlayer(Player& player);
 	virtual void draw(sf::RenderWindow& window);
+	void setPosition(double x, double y);
+	double getX();
+	double getY();
 };
 
 class Health : public Buff
@@ -152,6 +155,8 @@ private:
 public:
 	void StartGameCycle();
 	void StartTimeCycle();
+	void regenerateBuff();
+	bool isBuffsInCollision(Buff* buff1, Buff* buff2);
 	int checkCurrId();
 	void swapPlayerType();
 };
