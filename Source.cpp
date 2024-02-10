@@ -239,6 +239,9 @@ void Game::StartGameCycle()
 
 	sf::Vector2f move_dir = sf::Vector2f(0.f, 0.f);
 
+	/*Music fon("fon.wav", 50, 1);
+	fon.play();*/
+
 	window.setVerticalSyncEnabled(true);
 	while (window.isOpen())
 	{
@@ -470,4 +473,38 @@ void TextGui::setstring(int message)
 void TextGui::setstring(std::string message)
 {
 	text.setString(message);
+}
+
+Sound::Sound(std::string namefile, int volume)
+{
+	buffer.loadFromFile(namefile);
+	sound.setBuffer(buffer);
+	sound.setVolume(volume);
+}
+
+void Sound::ChangeVolume(int volume)
+{
+	sound.setVolume(volume);
+}
+
+void Sound::play()
+{
+	sound.play();
+}
+
+Music::Music(std::string namefile, int volume, bool loop)
+{
+	music.openFromFile(namefile);
+	music.setVolume(volume);
+	music.setLoop(loop); //1 передавайте если надо зациклить ћ”«я ”
+}
+
+void Music::ChangeVolume(int volume)
+{
+	music.setVolume(volume);
+}
+
+void Music::play()
+{
+	music.play();
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "SFML\Audio.hpp"
 #include <ctime>
 #include <cmath>
 #include <iostream>
@@ -177,3 +178,23 @@ public:
 	void draw(sf::RenderWindow& window);
 };
 
+class Sound
+{
+private:
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
+public:
+	Sound(std::string namefile, int volume);
+	void ChangeVolume(int volume);
+	void play();
+};
+
+class Music
+{
+private:
+	sf::Music music;
+public:
+	Music(std::string namefile, int volume, bool loop);
+	void ChangeVolume(int volume);
+	void play();
+};
