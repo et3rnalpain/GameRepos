@@ -141,7 +141,7 @@ protected:
 	sf::Texture mob_texture;
 	sf::Sprite mob_sprite;
 	sf::Vector2f movement_vector;
-	double x, y, health, damage, acceleration;
+	double x, y, health, damage, acceleration, ix,iy;
 	bool alive;
 public:
 	Mob();
@@ -153,7 +153,7 @@ public:
 	double getY();
 	void setXY(double x, double y);
 	bool isHit();
-	bool checkWall();
+	int checkWall();
 	int getHealth();
 	int getDamage();
 	sf::Vector2f getSpriteCenter();
@@ -202,7 +202,7 @@ private:
 	int TimeInSec = 0;
 	Buff* buffs[15];
 	Bullet* bullet = new Bullet();
-	Mob* mob = new Mob();
+	Mob* mob;
 	int currentId;
 public:
 	void StartGameCycle();

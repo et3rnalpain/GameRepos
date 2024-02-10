@@ -312,6 +312,7 @@ double Bullet::getY() {
 class Mob;
 Mob::Mob()
 {
+
 	mob_texture.loadFromFile("mob.jpg");
 	mob_texture.setSmooth(true);
 	mob_sprite.setTexture(mob_texture);
@@ -322,7 +323,7 @@ Mob::Mob()
 
 	x = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
 	y = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
-
+	ix = x; iy = y;
 	movement_vector.x = rand() % ((-1) - 1 - 1) + 1;
 	movement_vector.y = rand() % ((-1) - 1 - 1) + 1;
 	alive = true;
@@ -332,6 +333,7 @@ Mob::Mob()
 
 Mob::Mob(double x, double y)
 {
+	ix = x; iy = y;
 	mob_texture.loadFromFile("mob.jpg");
 	mob_texture.setSmooth(true);
 	mob_sprite.setTexture(mob_texture);
@@ -369,19 +371,24 @@ void Mob::draw(sf::RenderWindow& window){
 	window.draw(mob_sprite);
 }
 
-bool Mob::checkWall()
+int Mob::checkWall()
 {
-	if (x + (mob_sprite.getTextureRect().width / 2) >= SCREEN_WIDTH || x + (mob_sprite.getTextureRect().width / 2) <= 0) return 0;
-	if (y + (mob_sprite.getTextureRect().height / 2) >= SCREEN_HEIGHT || y + (mob_sprite.getTextureRect().height / 2) <= 0) return 0;
-	return 1;
+	if (x + (mob_sprite.getTextureRect().width) >= ix+400 || x <= ix-100) return 1;
+	if (y + (mob_sprite.getTextureRect().height) >= iy+400 || y <= iy-100) return 2;
+	return 0;
 }
 
 void Mob::movement()
 {
-	if (!checkWall()) {
+	if (checkWall()==1) {
 		movement_vector.x *= (-1);
+		
+	}
+	else if (checkWall() == 2) 
+	{
 		movement_vector.y *= (-1);
 	}
+
 	x += movement_vector.x;
 	y += movement_vector.y;
 
@@ -432,6 +439,11 @@ void Game::StartGameCycle()
 
 	Timer timer;
 	timer.StartTime();
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (maps[i].getId() == 1) mob = new Mob(maps[i].getX() + 100, maps[i].getY() + 100);
+	}
 
 	Gui sword("sword.png", 0, 900);
 	//TextGui swordnumb(player->getDamage(), 40, 100, 900);
