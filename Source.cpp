@@ -529,7 +529,7 @@ void Game::StartGameCycle()
 		mob->draw(window);
 		window.display();
 		deltaTime = clock.getElapsedTime();
-
+		if (player->getHealth() <= 0) { window.close(); }
 	}
 	timer.EndTime();
 	this->TimeInSec = timer.GetTime();
