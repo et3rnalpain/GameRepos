@@ -72,7 +72,7 @@ Player::Player()
 	invis = false;
 };
 
-Player::Player(double x, double y) 
+Player::Player(double x, double y, double health, double damage)
 {
 	player_texture.loadFromFile("player.jpg");
 	player_texture.setSmooth(true);
@@ -86,8 +86,8 @@ Player::Player(double x, double y)
 	min_speed = 1;
 	acceleration = 2;
 	deceleration = 0.94;
-	health = 10;
-	damage = 10;
+	this->health = health;
+	this->damage = damage;
 
 	invis = false;
 }
@@ -148,6 +148,10 @@ bool Player::CheckWall()
 	if (this->getSpriteCenter().x >= SCREEN_WIDTH || this->getSpriteCenter().x <= 0) return 0;
 	if (this->getSpriteCenter().y >= SCREEN_HEIGHT || this->getSpriteCenter().y <= 0) return 0;
 	return 1;
+}
+
+void Player::playerTookDamage(){
+	this->health--;
 }
 
 double Player::getX() { return x; }
@@ -224,6 +228,7 @@ void PlayerSnake::setDirection(int dir) {
 }
 
 /* Пуля */
+
 class Bullet;
 Bullet::Bullet()
 {
@@ -292,6 +297,109 @@ bool Bullet::isBulletAlive()
 	return this->isAlive;
 }
 
+double Bullet::getX() {
+	return this->x;
+}
+
+double Bullet::getY() {
+	return this->y;
+}
+
+/* Моб */
+
+class Mob;
+Mob::Mob()
+{
+	mob_texture.loadFromFile("mob.jpg");
+	mob_texture.setSmooth(true);
+	mob_sprite.setTexture(mob_texture);
+
+	this->health = 1000;
+	this->damage = 9;
+	this->acceleration = 1.2;
+
+	x = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
+	y = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
+
+	movement_vector.x = rand() % ((-1) - 1 - 1) + 1;
+	movement_vector.y = rand() % ((-1) - 1 - 1) + 1;
+	alive = true;
+	
+	mob_sprite.setPosition(x, y);
+}
+
+Mob::Mob(double x, double y)
+{
+	mob_texture.loadFromFile("mob.jpg");
+	mob_texture.setSmooth(true);
+	mob_sprite.setTexture(mob_texture);
+
+	this->health = 10;
+	this->damage = 9;
+	this->acceleration = 1.2;
+
+	this->x = x;
+	this->y = y;
+
+	movement_vector.x = rand() % ((-1) - 1 - 1) + 1;
+	movement_vector.y = rand() % ((-1) - 1 - 1) + 1;
+	alive = true;
+
+	mob_sprite.setPosition(x, y);
+}
+
+void Mob::setXY(double x, double y)
+{
+	this->x = x;
+	this->y = y;
+	mob_sprite.setPosition(x, y);
+}
+
+double Mob::getX() {
+	return this->x;
+}
+
+double Mob::getY() {
+	return this->y;
+}
+
+void Mob::draw(sf::RenderWindow& window){
+	window.draw(mob_sprite);
+}
+
+bool Mob::checkWall()
+{
+	if (x + (mob_sprite.getTextureRect().width / 2) >= SCREEN_WIDTH || x + (mob_sprite.getTextureRect().width / 2) <= 0) return 0;
+	if (y + (mob_sprite.getTextureRect().height / 2) >= SCREEN_HEIGHT || y + (mob_sprite.getTextureRect().height / 2) <= 0) return 0;
+	return 1;
+}
+
+void Mob::movement()
+{
+	if (!checkWall()) {
+		movement_vector.x *= (-1);
+		movement_vector.y *= (-1);
+	}
+	x += movement_vector.x;
+	y += movement_vector.y;
+
+	mob_sprite.setPosition(x, y);
+
+	acceleration = rand() % ((-5) - 5 + 1) - 1;
+}
+
+void Mob::updateCondition(Player* p, Bullet* b)
+{
+	this->movement();
+	if (p->getX() >= this->getX() && p->getX() <= this->getX() + mob_sprite.getTextureRect().width
+		&& p->getY() >= this->getY() && p->getY() <= this->getY() + mob_sprite.getTextureRect().height){
+		p->playerTookDamage();
+	}
+	if (b->getX() >= this->getX() && b->getX() <= this->getX() + mob_sprite.getTextureRect().width
+		&& b->getY() >= this->getY() && b->getY() <= this->getY() + mob_sprite.getTextureRect().height)
+		std::cout << "BULLET HIT";
+}
+
 /* Игра */
 
 class Game;
@@ -323,9 +431,9 @@ void Game::StartGameCycle()
 	timer.StartTime();
 
 	Gui sword("sword.png", 0, 900);
-	TextGui swordnumb(player->getDamage(), 40, 100, 900);
+	//TextGui swordnumb(player->getDamage(), 40, 100, 900);
 	Gui health("heart.png", 150, 900);
-	TextGui healthnumb(player->getHealth(), 40, 250, 900);
+	//TextGui healthnumb(player->getHealth(), 40, 250, 900);
 
 	sf::Vector2f move_dir = sf::Vector2f(0.f, 0.f);
 	sf::Vector2f tmp_dir = sf::Vector2f(0.f, -1.f);
@@ -379,10 +487,15 @@ void Game::StartGameCycle()
 			}
 		}
 		
+		TextGui swordnumb(player->getDamage(), 40, 100, 900);
+		TextGui healthnumb(player->getHealth(), 40, 250, 900);
+
 		player->movement(move_dir.x, move_dir.y);
 		player->checkPosition();
+		std::cout << this->checkCurrId();
 		bullet->movement();
 		bullet->checkPosition();
+		mob->updateCondition(player, bullet);
 		if (!player->CheckWall()) window.close();
 		for (int i = 0; i < 4; i++)
 		{
@@ -398,6 +511,7 @@ void Game::StartGameCycle()
 		healthnumb.draw(window);
 		bullet->draw(window);
 		player->draw(window);
+		mob->draw(window);
 		window.display();
 		deltaTime = clock.getElapsedTime();
 
@@ -455,6 +569,7 @@ int Game::checkCurrId()
 void Game::swapPlayerType()
 {
 	double cx = player->getX(), cy = player->getY();
+	int tmp_hp = player->getHealth(), tmp_dmg = player->getDamage();
 	int id = checkCurrId();
 	int dir = player->getDirection();
 	if (currentId != id)
@@ -462,10 +577,10 @@ void Game::swapPlayerType()
 		currentId = id;
 		switch (currentId)
 		{
-		case 1: {delete player; player = new PlayerUsual(cx, cy); }break;
-		case 2: {delete player; player = new PlayerSnake(cx, cy); player->setDirection(dir); }break;
-		case 3: {delete player; player = new PlayerBoss(cx, cy); }break;
-		case 4: {delete player; player = new PlayerInvisible(cx, cy); }break;
+		case 1: {delete player; player = new PlayerUsual(cx, cy, tmp_hp, tmp_dmg); }break;
+		case 2: {delete player; player = new PlayerSnake(cx, cy, tmp_hp, tmp_dmg); player->setDirection(dir); }break;
+		case 3: {delete player; player = new PlayerBoss(cx, cy, tmp_hp, tmp_dmg); }break;
+		case 4: {delete player; player = new PlayerInvisible(cx, cy, tmp_hp, tmp_dmg); }break;
 		default:
 			break;
 		}
