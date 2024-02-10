@@ -419,6 +419,7 @@ void Game::StartGameCycle()
 		if (rnd == 0) buffs[i] = new Damage();
 		else buffs[i] = new Health();
 	}
+	regenerateBuff();
 	maps[0].setXY(0, 0);
 	maps[1].setXY(SCREEN_WIDTH / 2, 0);
 	maps[2].setXY(0, SCREEN_HEIGHT / 2);
@@ -587,6 +588,31 @@ void Game::swapPlayerType()
 	}
 }
 
+bool Game::isBuffsInCollision(Buff* buff1, Buff* buff2) 
+{
+	return (buff1->getX() >= buff2->getX() && buff1->getX() <= (buff2->getX() + 50) && buff1->getY() >= buff2->getY() && buff1->getY() <= (buff2->getY() + 50));
+}
+
+void Game::regenerateBuff() 
+{
+	for (int i = 0; i < 15; i++) 
+	{
+		for (int z = 0; z < 15; z++) 
+		{
+			if (i != z) 
+			{
+				if (isBuffsInCollision(buffs[i], buffs[z]))
+				{
+					double 	x = rand() % 900 + 50, y = rand() % 900 + 50;
+					buffs[i]->setPosition(x, y);
+					i = 0;
+					z = 0;
+				}
+			}
+		}
+	}
+}
+
 /* Бонусы */
 
 class Buff;
@@ -595,14 +621,24 @@ class Damage;
 
 Buff::Buff() 
 {
-	x = rand() % 1000;
-	y = rand() % 1000;
+	x = rand() % 900 + 50;
+	y = rand() % 900 + 50;
 }
 
 void Buff::draw(sf::RenderWindow& window)
 {
 	window.draw(buff_sprite);
 }
+
+void Buff::setPosition(double x, double y) 
+{
+	this->x = x;
+	this->y = y;
+	buff_sprite.setPosition(x, y);
+}
+
+double Buff::getX() { return x; }
+double Buff::getY() { return y; }
 
 Damage::Damage() 
 {
@@ -614,11 +650,10 @@ Damage::Damage()
 
 Health::Health()
 {
-	buff_texture.loadFromFile("buff2.jpg");
+	buff_texture.loadFromFile("buff2.png");
 	buff_texture.setSmooth(true);
 	buff_sprite.setTexture(buff_texture);
 	buff_sprite.setPosition(sf::Vector2f(x, y));
-	buff_sprite.setScale(sf::Vector2f(0.05f, 0.05f));
 }
 
 /* Таймер */
