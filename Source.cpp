@@ -234,7 +234,7 @@ void PlayerSnake::setDirection(int dir) {
 class Bullet;
 Bullet::Bullet()
 {
-	bullet_texture.loadFromFile("pulya.jpg");
+	bullet_texture.loadFromFile("pulya.png");
 	bullet_texture.setSmooth(true);
 	bullet_sprite.setTexture(bullet_texture);
 
@@ -252,7 +252,7 @@ Bullet::Bullet()
 
 Bullet::Bullet(double dir_x, double dir_y, double player_x, double player_y)
 {
-	bullet_texture.loadFromFile("pulya.jpg");
+	bullet_texture.loadFromFile("pulya.png");
 	bullet_texture.setSmooth(true);
 	bullet_sprite.setTexture(bullet_texture);
 
