@@ -20,19 +20,19 @@ void Map::setId(int id)
 	{
 	case 1:
 	{
-		color = color.Red;
+		fon.makeSprite("buff1.png");
 	}break;
 	case 2:
 	{
-		color = color.Yellow;
+		fon.makeSprite("buff1.png");
 	}break;
 	case 3:
 	{
-		color = color.Blue;
+		fon.makeSprite("buff1.png");
 	}break;
 	case 4:
 	{
-		color = color.Green;
+		fon.makeSprite("buff1.png");
 	}break;
 	}
 }
@@ -43,6 +43,7 @@ void Map::setXY(int x_, int y_)
 	Map::rect.setSize(sf::Vector2f(h, w));
 	Map::rect.setPosition(sf::Vector2f(x, y));
 	Map::rect.setFillColor(color);
+	fon.setPosition(x, y);
 }
 
 double Map::getX() { return x; }
@@ -312,7 +313,7 @@ void Game::StartGameCycle()
 		else buffs[i] = new Health();
 	}
 	regenerateBuff();
-	maps[0].setXY(0, 0);
+	maps[0].setXY(0, 0); 
 	maps[1].setXY(SCREEN_WIDTH / 2, 0);
 	maps[2].setXY(0, SCREEN_HEIGHT / 2);
 	maps[3].setXY(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
@@ -387,7 +388,7 @@ void Game::StartGameCycle()
 		if (!player->CheckWall()) window.close();
 		for (int i = 0; i < 4; i++)
 		{
-			window.draw(maps[i].rect);
+			window.draw();
 		}
 		for (int i = 0; i < 15; i++)
 		{
@@ -569,6 +570,14 @@ Gui::Gui(std::string filename, int x, int y)
 	Sprite.setTexture(Texture);
 	Sprite.setPosition(x, y);
 }
+
+void Gui::makeSprite(std::string filename) 
+{
+	Texture.loadFromFile(filename);
+	Sprite.setTexture(Texture);
+};
+
+sf::Sprite Gui::getSprite() { return Sprite; }
 
 void Gui::draw(sf::RenderWindow& window)
 {

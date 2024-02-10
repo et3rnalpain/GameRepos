@@ -11,13 +11,32 @@
 #define SCREEN_HEIGHT 1000
 
 
+class Gui //класс для создания и отображения спрайта
+{
+private:
+	sf::Texture Texture;
+	sf::Sprite Sprite;
+public:
+	Gui() {};
+	Gui(std::string filename, int x, int y);
+	void setPosition(int x, int y)
+	{
+		Sprite.setPosition(sf::Vector2f(x, y));
+	}
+	void makeSprite(std::string filename);
+	void draw(sf::RenderWindow& window);
+	sf::Sprite getSprite();
+};
+
 class Map //класс карты
 {
 private:
 	int id;
 	double x, y, h = (SCREEN_HEIGHT / 2), w = (SCREEN_WIDTH / 2);
 	sf::Color color;
+
 public:
+	Gui fon;
 	sf::RectangleShape rect;
 	Map();
 	int getId(); //получить айди поля (1-4)
@@ -173,19 +192,6 @@ public:
 	int GetTime();
 };
 
-class Gui //класс для создания и отображения спрайта
-{
-private:
-	sf::Texture Texture;
-	sf::Sprite Sprite;
-public:
-	Gui(std::string filename, int x, int y);
-	void setPosition(int x, int y)
-	{
-		Sprite.setPosition(sf::Vector2f(x, y));
-	}
-	void draw(sf::RenderWindow& window);
-};
 
 class TextGui //класс для создания и отображения текста
 {
