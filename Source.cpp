@@ -20,19 +20,19 @@ void Map::setId(int id)
 	{
 	case 1:
 	{
-		fon.makeSprite("buff1.png");
+		fon.makeSprite("fon1.png");
 	}break;
 	case 2:
 	{
-		fon.makeSprite("buff1.png");
+		fon.makeSprite("fon2.png");
 	}break;
 	case 3:
 	{
-		fon.makeSprite("buff1.png");
+		fon.makeSprite("fon3.png");
 	}break;
 	case 4:
 	{
-		fon.makeSprite("buff1.png");
+		fon.makeSprite("fon4.png");
 	}break;
 	}
 }
@@ -44,6 +44,7 @@ void Map::setXY(int x_, int y_)
 	Map::rect.setPosition(sf::Vector2f(x, y));
 	Map::rect.setFillColor(color);
 	fon.setPosition(x, y);
+	
 }
 
 double Map::getX() { return x; }
@@ -501,7 +502,7 @@ void Game::StartGameCycle()
 		if (!player->CheckWall()) window.close();
 		for (int i = 0; i < 4; i++)
 		{
-			window.draw();
+			maps[i].fon.draw(window);
 		}
 		for (int i = 0; i < 15; i++)
 		{
