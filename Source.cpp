@@ -563,8 +563,17 @@ void Game::StartGameCycle()
 	sf::Vector2f move_dir = sf::Vector2f(0.f, 0.f);
 	sf::Vector2f tmp_dir = sf::Vector2f(0.f, -1.f);
 
-	/*Music fon("fon.wav", 50, 1);
-	fon.play();*/
+	sf::Music music;
+	music.openFromFile("music.wav");
+	music.setVolume(50);
+	music.setLoop(1); 
+	music.play();
+
+	sf::Sound zvuk_vystrel;
+	sf::SoundBuffer zvuk_vystrel_buffer;
+	zvuk_vystrel_buffer.loadFromFile("zvuk_vystrel.wav");
+	zvuk_vystrel.setBuffer(zvuk_vystrel_buffer);
+	zvuk_vystrel.setVolume(50);
 
 	window.setVerticalSyncEnabled(true);
 	while (window.isOpen())
@@ -608,6 +617,7 @@ void Game::StartGameCycle()
 				if (!bullet->isBulletAlive()) {
 					//bullet = new Bullet(tmp_dir.x, tmp_dir.y, player->getSpriteCenter().x, player->getSpriteCenter().y);
 					bullet = new Bullet(tmp_dir.x, tmp_dir.y, player->getX(), player->getY());
+					zvuk_vystrel.play();
 				}
 			}
 		}

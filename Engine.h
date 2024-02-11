@@ -1,6 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "SFML\Audio.hpp"
+#include "SFML/Audio.hpp"
 #include <ctime>
 #include <cmath>
 #include <iostream>
