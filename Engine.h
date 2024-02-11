@@ -69,6 +69,7 @@ public:
 	double getY();
 };
 
+class Mob;
 class Player //класс игрока абстрактный
 {
 protected:
@@ -76,7 +77,7 @@ protected:
 	sf::Sprite player_sprite;
 	sf::Vector2f movement_vector;
 	double x, y,acceleration, deceleration, max_speed, min_speed, health, damage;
-	bool invis;
+	bool damage_taken = false;
 public:
 	Player();
 	Player(double x, double y, double health, double damage);
@@ -88,14 +89,15 @@ public:
 	virtual void draw(sf::RenderWindow& window);
 	virtual void setDirection(int dir);
 
-	void playerTookDamage();
+	void tookDamage(Mob* m);
 	void setXY(double x, double y);
 	double getX();
 	double getY();
 	int getHealth();
 	int getDamage();
 	int getDirection();
-	sf::Vector2f getSpriteCenter();
+	//sf::Vector2f getSpriteCenter();
+	sf::Sprite getSprite();
 
 	bool CheckWall();
 };
@@ -156,11 +158,11 @@ public:
 	double getX();
 	double getY();
 	void setXY(double x, double y);
-	bool isHit();
 	int checkWall();
 	int getHealth();
 	int getDamage();
 	sf::Vector2f getSpriteCenter();
+	void tookDamage(Player* p);
 };
 
 class Buff //класс зелек (увеличение хп и урона)

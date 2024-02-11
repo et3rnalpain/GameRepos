@@ -55,9 +55,10 @@ double Map::getY() { return y; }
 class Player;
 Player::Player()
 {
-	player_texture.loadFromFile("player.jpg");
+	player_texture.loadFromFile("player.png");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
+	player_sprite.setOrigin(player_sprite.getTextureRect().width / 2, player_sprite.getTextureRect().height / 2);
 
 	x = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
 	y = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
@@ -71,14 +72,16 @@ Player::Player()
 	health = 10;
 	damage = 10;
 
-	invis = false;
+	damage_taken = false;
 };
 
 Player::Player(double x, double y, double health, double damage)
 {
-	player_texture.loadFromFile("player.jpg");
+	player_texture.loadFromFile("player.png");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
+	player_sprite.setOrigin(player_sprite.getTextureRect().width / 2, player_sprite.getTextureRect().height / 2);
+
 	this->x = x;
 	this->y = y;
 	movement_vector.x = 0;
@@ -91,14 +94,16 @@ Player::Player(double x, double y, double health, double damage)
 	this->health = health;
 	this->damage = damage;
 
-	invis = false;
+	damage_taken = false;
 }
 
 Player::Player(const Player& player)
 {
-	player_texture.loadFromFile("player.jpg");
+	player_texture.loadFromFile("player.png");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
+	player_sprite.setOrigin(player_sprite.getTextureRect().width / 2, player_sprite.getTextureRect().height / 2);
+
 	this->x = player.x;
 	this->y = player.y;
 	this->movement_vector = player.movement_vector;
@@ -110,13 +115,26 @@ Player::Player(const Player& player)
 	this->health = player.health;
 	this->damage = player.damage;
 
-	this->invis = player.invis;
+	this->damage_taken = player.damage_taken;
 }
 
 void Player::attack(Bullet* bullet, double dir_x, double dir_y, double player_x, double player_y) {};
 
 void Player::movement(double direction_x, double direction_y)
 {
+	if (direction_x == 0.f && direction_y == -1.f) {
+		player_sprite.setRotation(0);
+	}
+	else if (direction_x == 0.f && direction_y == 1.f) {
+		player_sprite.setRotation(180);
+	}
+	else if (direction_x == 1.f && direction_y == 0.f) {
+		player_sprite.setRotation(270);
+	}
+	else if (direction_x == -1.f && direction_y == 0.f) {
+		player_sprite.setRotation(90);
+	}
+
 	this->movement_vector.x += direction_x * this->acceleration;
 	this->movement_vector.y += direction_y * this->acceleration;
 
@@ -147,13 +165,22 @@ void Player::draw(sf::RenderWindow& window){
 
 bool Player::CheckWall()
 {
-	if (this->getSpriteCenter().x >= SCREEN_WIDTH || this->getSpriteCenter().x <= 0) return 0;
-	if (this->getSpriteCenter().y >= SCREEN_HEIGHT || this->getSpriteCenter().y <= 0) return 0;
+	if (this->getX() >= SCREEN_WIDTH || this->getX() <= 0) return 0;
+	if (this->getY() >= SCREEN_HEIGHT || this->getY() <= 0) return 0;
 	return 1;
 }
 
-void Player::playerTookDamage(){
-	this->health--;
+void Player::tookDamage(Mob* m){
+	if (damage_taken == false) {
+		this->health -= m->getDamage();
+		this->damage_taken = true;
+	}
+
+	x += movement_vector.x * (-20);
+	y += movement_vector.y * (-20);
+
+	if (movement_vector.x != 0 || movement_vector.y != 0)
+		this->damage_taken = false;
 }
 
 double Player::getX() { return x; }
@@ -170,10 +197,14 @@ void Player::setXY(double x, double y)
 	this->y = y;
 }
 
-sf::Vector2f Player::getSpriteCenter()
+/*sf::Vector2f Player::getSpriteCenter()
 {
 	sf::Vector2f center(this->x + (player_sprite.getTextureRect().width / 2), this->y + (player_sprite.getTextureRect().height / 2));
 	return center;
+}*/
+
+sf::Sprite Player::getSprite(){
+	return this->player_sprite;
 }
 
 int Player::getDirection()
@@ -209,14 +240,18 @@ void PlayerBoss::attack(Bullet* bullet, double dir_x, double dir_y, double playe
 class PlayerSnake; //Движется змейкой
 void PlayerSnake::movement(double dir_x, double dir_y)
 {
-	if (dir_x == 0.f && dir_y == -1.f)
-		this->dir = 1;
-	else if (dir_x == 0.f && dir_y == 1.f)
-		this->dir = 2;
-	else if (dir_x == 1.f && dir_y == 0.f)
-		this->dir = 3;
-	else if (dir_x == -1.f && dir_y == 0.f)
-		this->dir = 4;
+	if (dir_x == 0.f && dir_y == -1.f) {
+		this->dir = 1; player_sprite.setRotation(0);
+	}
+	else if (dir_x == 0.f && dir_y == 1.f){
+		this->dir = 2; player_sprite.setRotation(180);
+	}
+	else if (dir_x == 1.f && dir_y == 0.f){
+		this->dir = 3; player_sprite.setRotation(270);
+	}
+	else if (dir_x == -1.f && dir_y == 0.f){
+		this->dir = 4; player_sprite.setRotation(90);
+	}
 }
 void PlayerSnake::checkPosition()
 {
@@ -237,6 +272,7 @@ Bullet::Bullet()
 	bullet_texture.loadFromFile("pulya.png");
 	bullet_texture.setSmooth(true);
 	bullet_sprite.setTexture(bullet_texture);
+	bullet_sprite.setOrigin(bullet_sprite.getTextureRect().width / 2, bullet_sprite.getTextureRect().height / 2);
 
 	this->x = 0;
 	this->y = 0;
@@ -255,6 +291,8 @@ Bullet::Bullet(double dir_x, double dir_y, double player_x, double player_y)
 	bullet_texture.loadFromFile("pulya.png");
 	bullet_texture.setSmooth(true);
 	bullet_sprite.setTexture(bullet_texture);
+	bullet_sprite.setOrigin(bullet_sprite.getTextureRect().width / 2, bullet_sprite.getTextureRect().height / 2);
+
 
 	this->x = player_x;
 	this->y = player_y;
@@ -317,7 +355,7 @@ Mob::Mob()
 	mob_texture.setSmooth(true);
 	mob_sprite.setTexture(mob_texture);
 
-	this->health = 1000;
+	this->health = 100;
 	this->damage = 9;
 	this->acceleration = 1.2;
 
@@ -338,7 +376,7 @@ Mob::Mob(double x, double y)
 	mob_texture.setSmooth(true);
 	mob_sprite.setTexture(mob_texture);
 
-	this->health = 10;
+	this->health = 100;
 	this->damage = 9;
 	this->acceleration = 1.2;
 
@@ -407,14 +445,20 @@ void Mob::movement()
 
 void Mob::updateCondition(Player* p, Bullet* b)
 {
+	bool dmg_flag = false;
 	this->movement();
 	if (p->getX() >= this->getX() && p->getX() <= this->getX() + mob_sprite.getTextureRect().width
-		&& p->getY() >= this->getY() && p->getY() <= this->getY() + mob_sprite.getTextureRect().height){
-		p->playerTookDamage();
+		&& p->getY() >= this->getY() && p->getY() <= this->getY() + mob_sprite.getTextureRect().height
+		&& dmg_flag == false) {
+		p->tookDamage(this);
 	}
 	if (b->getX() >= this->getX() && b->getX() <= this->getX() + mob_sprite.getTextureRect().width
 		&& b->getY() >= this->getY() && b->getY() <= this->getY() + mob_sprite.getTextureRect().height)
-		std::cout << "BULLET HIT";
+		this->tookDamage(p);
+}
+
+void Mob::tookDamage(Player* p){
+	this->health -= p->getDamage();
 }
 
 /* Игра */
@@ -510,9 +554,9 @@ void Game::StartGameCycle()
 			}
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->checkCurrId() == 1) {
-				/*player->attack(bullet, tmp_dir.x, tmp_dir.y, player->getSpriteCenter().x, player->getSpriteCenter().y);*/
 				if (!bullet->isBulletAlive()) {
-					bullet = new Bullet(tmp_dir.x, tmp_dir.y, player->getSpriteCenter().x, player->getSpriteCenter().y);
+					//bullet = new Bullet(tmp_dir.x, tmp_dir.y, player->getSpriteCenter().x, player->getSpriteCenter().y);
+					bullet = new Bullet(tmp_dir.x, tmp_dir.y, player->getX(), player->getY());
 				}
 			}
 		}
@@ -556,7 +600,8 @@ void Game::StartGameCycle()
 		mob->draw(window);
 		window.display();
 		deltaTime = clock.getElapsedTime();
-		//if (player->getHealth() <= 0) { window.close(); }
+		if (player->getHealth() <= 0) { window.close(); }
+		if (mob->getHealth() <= 0) { window.close(); }
 	}
 	timer.EndTime();
 	this->TimeInSec = timer.GetTime();
@@ -599,7 +644,7 @@ int Game::checkCurrId()
 	int id = 0;
 	for (int i = 0; i < 4; i++)
 	{
-		if (player->getSpriteCenter().x <= maps[i].getX() + SCREEN_WIDTH / 2 && player->getSpriteCenter().x >= maps[i].getX() && player->getSpriteCenter().y <= maps[i].getY() + SCREEN_HEIGHT / 2 && player->getSpriteCenter().y >= maps[i].getY())
+		if (player->getX() <= maps[i].getX() + SCREEN_WIDTH / 2 && player->getX() >= maps[i].getX() && player->getY() <= maps[i].getY() + SCREEN_HEIGHT / 2 && player->getY() >= maps[i].getY())
 		{
 			id = maps[i].getId();
 		}
