@@ -67,6 +67,7 @@ public:
 	bool isBulletAlive();
 	double getX();
 	double getY();
+	void removeBullet();
 };
 
 class Mob;

@@ -274,6 +274,19 @@ void PlayerSnake::checkPosition()
 
 void PlayerSnake::setDirection(int dir) {
 	this->dir = dir;
+	if (this->dir == 1) {
+		player_sprite.setRotation(270); 
+	}
+	else if (this->dir == 2) {
+		player_sprite.setRotation(90);
+	}
+	else if (this->dir = 3) {
+		player_sprite.setRotation(0);
+	}
+	else if (this->dir = 4) {
+		player_sprite.setRotation(0);
+	}
+	this->player_sprite.setScale(0.5, 0.5);
 }
 
 /* Пуля */
@@ -293,7 +306,7 @@ Bullet::Bullet()
 	bullet_sprite.setPosition(this->x, this->y);
 	this->max_speed = 500;
 	this->min_speed = 1;
-	this->acceleration = 1.6;
+	this->acceleration = 1.3;
 	
 	isAlive = false;
 }
@@ -313,7 +326,7 @@ Bullet::Bullet(double dir_x, double dir_y, double player_x, double player_y)
 	bullet_sprite.setPosition(this->x, this->y);
 	this->max_speed = 500;
 	this->min_speed = 1;
-	this->acceleration = 1.6;
+	this->acceleration = 1.3;
 	
 	isAlive = true;
 }
@@ -355,6 +368,15 @@ double Bullet::getX() {
 
 double Bullet::getY() {
 	return this->y;
+}
+
+void Bullet::removeBullet() {
+	this->isAlive = false; 
+	this->x = -100;
+	this->y = -100;
+	this->bullet_vector.x = -100;
+	this->bullet_vector.y = -100;
+	this->bullet_sprite.setPosition(x, y);
 }
 
 /* Моб */
@@ -465,8 +487,9 @@ void Mob::updateCondition(Player* p, Bullet* b)
 		p->tookDamage(this);
 	}
 	if (b->getX() >= this->getX() && b->getX() <= this->getX() + mob_sprite.getTextureRect().width
-		&& b->getY() >= this->getY() && b->getY() <= this->getY() + mob_sprite.getTextureRect().height)
-		this->tookDamage(p);
+		&& b->getY() >= this->getY() && b->getY() <= this->getY() + mob_sprite.getTextureRect().height){
+		this->tookDamage(p); b->removeBullet();
+	}
 }
 
 void Mob::tookDamage(Player* p){
@@ -614,8 +637,8 @@ void Game::StartGameCycle()
 
 		window.display();
 		deltaTime = clock.getElapsedTime();
-		//if (player->getHealth() <= 0) { window.close(); }
-		//if (mob->getHealth() <= 0) { window.close(); }
+		if (player->getHealth() <= 0) { window.close(); }
+		if (mob->getHealth() <= 0) { window.close(); }
 	}
 	timer.EndTime();
 	this->TimeInSec = timer.GetTime();
@@ -679,8 +702,8 @@ void Game::swapPlayerType()
 		switch (currentId)
 		{
 		case 1: {delete player; player = new PlayerBoss(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel_with_gun.png"); player->setScale(0.5, 0.5); }break;
-		case 2: {delete player; player = new PlayerSnake(cx, cy, tmp_hp, tmp_dmg); player->setSprite("tachka.png"); player->setDirection(dir); player->setScale(2, 2); }break;
-		case 3: {delete player; player = new PlayerUsual(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel.png"); player->setScale(0.5, 0.5); }break;
+		case 2: {delete player; player = new PlayerSnake(cx, cy, tmp_hp, tmp_dmg); player->setSprite("tachka.png"); player->setDirection(dir); player->setScale(1, 1);  }break;
+		case 3: {delete player; player = new PlayerUsual(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel.png"); player->setScale(0.5, 0.5);}break;
 		case 4: {delete player; player = new PlayerInvisible(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel.png"); player->setScale(0.5, 0.5); }break;
 		default:
 			break;
