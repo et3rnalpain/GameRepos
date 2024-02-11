@@ -493,7 +493,7 @@ void Game::StartGameCycle()
 
 		player->movement(move_dir.x, move_dir.y);
 		player->checkPosition();
-		std::cout << this->checkCurrId();
+		//std::cout << this->checkCurrId();
 		bullet->movement();
 		bullet->checkPosition();
 		mob->updateCondition(player, bullet);
