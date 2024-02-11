@@ -20,19 +20,19 @@ void Map::setId(int id)
 	{
 	case 1:
 	{
-		color = color.Red;
+		fon.makeSprite("fon1.png");
 	}break;
 	case 2:
 	{
-		color = color.Yellow;
+		fon.makeSprite("fon2.png");
 	}break;
 	case 3:
 	{
-		color = color.Blue;
+		fon.makeSprite("fon3.png");
 	}break;
 	case 4:
 	{
-		color = color.Green;
+		fon.makeSprite("fon4.png");
 	}break;
 	}
 }
@@ -43,6 +43,8 @@ void Map::setXY(int x_, int y_)
 	Map::rect.setSize(sf::Vector2f(h, w));
 	Map::rect.setPosition(sf::Vector2f(x, y));
 	Map::rect.setFillColor(color);
+	fon.setPosition(x, y);
+	
 }
 
 double Map::getX() { return x; }
@@ -232,7 +234,7 @@ void PlayerSnake::setDirection(int dir) {
 class Bullet;
 Bullet::Bullet()
 {
-	bullet_texture.loadFromFile("pulya.jpg");
+	bullet_texture.loadFromFile("pulya.png");
 	bullet_texture.setSmooth(true);
 	bullet_sprite.setTexture(bullet_texture);
 
@@ -250,7 +252,7 @@ Bullet::Bullet()
 
 Bullet::Bullet(double dir_x, double dir_y, double player_x, double player_y)
 {
-	bullet_texture.loadFromFile("pulya.jpg");
+	bullet_texture.loadFromFile("pulya.png");
 	bullet_texture.setSmooth(true);
 	bullet_sprite.setTexture(bullet_texture);
 
@@ -310,6 +312,7 @@ double Bullet::getY() {
 class Mob;
 Mob::Mob()
 {
+
 	mob_texture.loadFromFile("mob.jpg");
 	mob_texture.setSmooth(true);
 	mob_sprite.setTexture(mob_texture);
@@ -320,7 +323,7 @@ Mob::Mob()
 
 	x = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
 	y = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
-
+	ix = x; iy = y;
 	movement_vector.x = rand() % ((-1) - 1 - 1) + 1;
 	movement_vector.y = rand() % ((-1) - 1 - 1) + 1;
 	alive = true;
@@ -330,6 +333,7 @@ Mob::Mob()
 
 Mob::Mob(double x, double y)
 {
+	ix = x; iy = y;
 	mob_texture.loadFromFile("mob.jpg");
 	mob_texture.setSmooth(true);
 	mob_sprite.setTexture(mob_texture);
@@ -363,23 +367,36 @@ double Mob::getY() {
 	return this->y;
 }
 
+int Mob::getHealth() {
+	return this->health;
+}
+
+int Mob::getDamage() {
+	return this->damage;
+}
+
 void Mob::draw(sf::RenderWindow& window){
 	window.draw(mob_sprite);
 }
 
-bool Mob::checkWall()
+int Mob::checkWall()
 {
-	if (x + (mob_sprite.getTextureRect().width / 2) >= SCREEN_WIDTH || x + (mob_sprite.getTextureRect().width / 2) <= 0) return 0;
-	if (y + (mob_sprite.getTextureRect().height / 2) >= SCREEN_HEIGHT || y + (mob_sprite.getTextureRect().height / 2) <= 0) return 0;
-	return 1;
+	if (x + (mob_sprite.getTextureRect().width) >= ix+400 || x <= ix-100) return 1;
+	if (y + (mob_sprite.getTextureRect().height) >= iy+400 || y <= iy-100) return 2;
+	return 0;
 }
 
 void Mob::movement()
 {
-	if (!checkWall()) {
+	if (checkWall()==1) {
 		movement_vector.x *= (-1);
+		
+	}
+	else if (checkWall() == 2) 
+	{
 		movement_vector.y *= (-1);
 	}
+
 	x += movement_vector.x;
 	y += movement_vector.y;
 
@@ -420,7 +437,7 @@ void Game::StartGameCycle()
 		else buffs[i] = new Health();
 	}
 	regenerateBuff();
-	maps[0].setXY(0, 0);
+	maps[0].setXY(0, 0); 
 	maps[1].setXY(SCREEN_WIDTH / 2, 0);
 	maps[2].setXY(0, SCREEN_HEIGHT / 2);
 	maps[3].setXY(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
@@ -431,10 +448,22 @@ void Game::StartGameCycle()
 	Timer timer;
 	timer.StartTime();
 
+	for (int i = 0; i < 4; i++)
+	{
+		if (maps[i].getId() == 1) mob = new Mob(maps[i].getX() + 100, maps[i].getY() + 100);
+	}
+
 	Gui sword("sword.png", 0, 900);
-	//TextGui swordnumb(player->getDamage(), 40, 100, 900);
+	TextGui swordnumb(player->getDamage(), 40, 100, 900);
 	Gui health("heart.png", 150, 900);
-	//TextGui healthnumb(player->getHealth(), 40, 250, 900);
+	TextGui healthnumb(player->getHealth(), 40, 250, 900);
+
+	TextGui bossDamage(mob->getDamage(), 30, int(mob->getX())+20, int(mob->getY()-40));
+	Gui bossDamageSprite("sword.png", mob->getX(), mob->getY()-20);
+	bossDamageSprite.resize(0.2, 0.2);
+	TextGui bossHealth(mob->getHealth(), 30, int(mob->getX()) + 60, int(mob->getY()-40));
+	Gui bossHealthSprite("heart.png", mob->getX()+40, mob->getY()-20);
+	bossHealthSprite.resize(0.2, 0.2);
 
 	sf::Vector2f move_dir = sf::Vector2f(0.f, 0.f);
 	sf::Vector2f tmp_dir = sf::Vector2f(0.f, -1.f);
@@ -488,8 +517,14 @@ void Game::StartGameCycle()
 			}
 		}
 		
-		TextGui swordnumb(player->getDamage(), 40, 100, 900);
-		TextGui healthnumb(player->getHealth(), 40, 250, 900);
+		swordnumb.setstring(player->getDamage());
+		healthnumb.setstring(player->getHealth());
+
+		bossDamage.setPosition(int(mob->getX())+20, int(mob->getY() - 40));
+		bossHealth.setPosition(int(mob->getX()) + 60, int(mob->getY() - 40));
+		bossDamageSprite.setPosition(mob->getX(), mob->getY() - 20);
+		bossHealthSprite.setPosition(mob->getX()+40, mob->getY() - 20);
+		bossHealth.setstring(mob->getHealth());
 
 		player->movement(move_dir.x, move_dir.y);
 		player->checkPosition();
@@ -500,7 +535,7 @@ void Game::StartGameCycle()
 		if (!player->CheckWall()) window.close();
 		for (int i = 0; i < 4; i++)
 		{
-			window.draw(maps[i].rect);
+			maps[i].fon.draw(window);
 		}
 		for (int i = 0; i < 15; i++)
 		{
@@ -510,12 +545,18 @@ void Game::StartGameCycle()
 		swordnumb.draw(window);
 		health.draw(window);
 		healthnumb.draw(window);
+
+		bossDamageSprite.draw(window);
+		bossHealthSprite.draw(window);
+		bossDamage.draw(window);
+		bossHealth.draw(window);
+
 		bullet->draw(window);
 		player->draw(window);
 		mob->draw(window);
 		window.display();
 		deltaTime = clock.getElapsedTime();
-
+		//if (player->getHealth() <= 0) { window.close(); }
 	}
 	timer.EndTime();
 	this->TimeInSec = timer.GetTime();
@@ -684,6 +725,14 @@ Gui::Gui(std::string filename, int x, int y)
 	Sprite.setTexture(Texture);
 	Sprite.setPosition(x, y);
 }
+
+void Gui::makeSprite(std::string filename) 
+{
+	Texture.loadFromFile(filename);
+	Sprite.setTexture(Texture);
+};
+
+sf::Sprite Gui::getSprite() { return Sprite; }
 
 void Gui::draw(sf::RenderWindow& window)
 {

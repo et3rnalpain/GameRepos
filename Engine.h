@@ -11,13 +11,36 @@
 #define SCREEN_HEIGHT 1000
 
 
+class Gui //класс для создания и отображения спрайта
+{
+private:
+	sf::Texture Texture;
+	sf::Sprite Sprite;
+public:
+	Gui() {};
+	Gui(std::string filename, int x, int y);
+	void setPosition(int x, int y)
+	{
+		Sprite.setPosition(sf::Vector2f(x, y));
+	}
+	void makeSprite(std::string filename);
+	void draw(sf::RenderWindow& window);
+	void resize(float w, float h)
+	{
+		Sprite.setScale(sf::Vector2f(w, h));
+	}
+	sf::Sprite getSprite();
+};
+
 class Map //класс карты
 {
 private:
 	int id;
 	double x, y, h = (SCREEN_HEIGHT / 2), w = (SCREEN_WIDTH / 2);
 	sf::Color color;
+
 public:
+	Gui fon;
 	sf::RectangleShape rect;
 	Map();
 	int getId(); //получить айди поля (1-4)
@@ -122,7 +145,7 @@ protected:
 	sf::Texture mob_texture;
 	sf::Sprite mob_sprite;
 	sf::Vector2f movement_vector;
-	double x, y, health, damage, acceleration;
+	double x, y, health, damage, acceleration, ix,iy;
 	bool alive;
 public:
 	Mob();
@@ -134,7 +157,7 @@ public:
 	double getY();
 	void setXY(double x, double y);
 	bool isHit();
-	bool checkWall();
+	int checkWall();
 	int getHealth();
 	int getDamage();
 	sf::Vector2f getSpriteCenter();
@@ -183,7 +206,7 @@ private:
 	int TimeInSec = 0;
 	Buff* buffs[15];
 	Bullet* bullet = new Bullet();
-	Mob* mob = new Mob();
+	Mob* mob;
 	int currentId;
 public:
 	void StartGameCycle();
@@ -206,19 +229,6 @@ public:
 	int GetTime();
 };
 
-class Gui //класс для создания и отображения спрайта
-{
-private:
-	sf::Texture Texture;
-	sf::Sprite Sprite;
-public:
-	Gui(std::string filename, int x, int y);
-	void setPosition(int x, int y)
-	{
-		Sprite.setPosition(sf::Vector2f(x, y));
-	}
-	void draw(sf::RenderWindow& window);
-};
 
 class TextGui //класс для создания и отображения текста
 {
@@ -233,6 +243,10 @@ public:
 	void setPosition(int x, int y)
 	{
 		text.setPosition(sf::Vector2f(x, y));
+	}
+	void setColor(sf::Color color)
+	{
+		text.setFillColor(color);
 	}
 	void draw(sf::RenderWindow& window);
 };
