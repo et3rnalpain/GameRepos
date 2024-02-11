@@ -55,7 +55,7 @@ double Map::getY() { return y; }
 class Player;
 Player::Player()
 {
-	player_texture.loadFromFile("player.png");
+	player_texture.loadFromFile("chel.png");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
 	player_sprite.setOrigin(player_sprite.getTextureRect().width / 2, player_sprite.getTextureRect().height / 2);
@@ -77,7 +77,7 @@ Player::Player()
 
 Player::Player(double x, double y, double health, double damage)
 {
-	player_texture.loadFromFile("player.png");
+	player_texture.loadFromFile("chel.png");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
 	player_sprite.setOrigin(player_sprite.getTextureRect().width / 2, player_sprite.getTextureRect().height / 2);
@@ -99,7 +99,7 @@ Player::Player(double x, double y, double health, double damage)
 
 Player::Player(const Player& player)
 {
-	player_texture.loadFromFile("player.png");
+	player_texture.loadFromFile("chel.png");
 	player_texture.setSmooth(true);
 	player_sprite.setTexture(player_texture);
 	player_sprite.setOrigin(player_sprite.getTextureRect().width / 2, player_sprite.getTextureRect().height / 2);
@@ -123,10 +123,10 @@ void Player::attack(Bullet* bullet, double dir_x, double dir_y, double player_x,
 void Player::movement(double direction_x, double direction_y)
 {
 	if (direction_x == 0.f && direction_y == -1.f) {
-		player_sprite.setRotation(0);
+		player_sprite.setRotation(180);
 	}
 	else if (direction_x == 0.f && direction_y == 1.f) {
-		player_sprite.setRotation(180);
+		player_sprite.setRotation(0);
 	}
 	else if (direction_x == 1.f && direction_y == 0.f) {
 		player_sprite.setRotation(270);
@@ -207,6 +207,14 @@ sf::Sprite Player::getSprite(){
 	return this->player_sprite;
 }
 
+void Player::setSprite(std::string filename){
+	player_texture.loadFromFile(filename);
+	player_texture.setSmooth(true);
+	player_sprite.setTexture(player_texture);
+	player_sprite.setOrigin(player_sprite.getTextureRect().width / 2, player_sprite.getTextureRect().height / 2);
+
+}
+
 int Player::getDirection()
 {
 	if (this->movement_vector.x == 0 && this->movement_vector.y < 0)
@@ -221,6 +229,10 @@ int Player::getDirection()
 }
 
 void Player::setDirection(int dir) {};
+
+void Player::setScale(double x, double y){
+	this->player_sprite.setScale(x, y);
+}
 
 /* Наследники класса Игрок */
 
@@ -241,16 +253,16 @@ class PlayerSnake; //Движется змейкой
 void PlayerSnake::movement(double dir_x, double dir_y)
 {
 	if (dir_x == 0.f && dir_y == -1.f) {
-		this->dir = 1; player_sprite.setRotation(0);
+		this->dir = 1; player_sprite.setRotation(270); player_sprite.setScale(1, 1);
 	}
 	else if (dir_x == 0.f && dir_y == 1.f){
-		this->dir = 2; player_sprite.setRotation(180);
+		this->dir = 2; player_sprite.setRotation(90); player_sprite.setScale(1, 1);
 	}
 	else if (dir_x == 1.f && dir_y == 0.f){
-		this->dir = 3; player_sprite.setRotation(270);
+		this->dir = 3; player_sprite.setRotation(0); player_sprite.setScale(1, 1);
 	}
 	else if (dir_x == -1.f && dir_y == 0.f){
-		this->dir = 4; player_sprite.setRotation(90);
+		this->dir = 4; player_sprite.setRotation(0); player_sprite.setScale(-1,1);
 	}
 }
 void PlayerSnake::checkPosition()
@@ -585,10 +597,6 @@ void Game::StartGameCycle()
 		{
 			buffs[i]->draw(window);
 		}
-		sword.draw(window);
-		swordnumb.draw(window);
-		health.draw(window);
-		healthnumb.draw(window);
 
 		bossDamageSprite.draw(window);
 		bossHealthSprite.draw(window);
@@ -598,10 +606,16 @@ void Game::StartGameCycle()
 		bullet->draw(window);
 		player->draw(window);
 		mob->draw(window);
+
+		sword.draw(window);
+		swordnumb.draw(window);
+		health.draw(window);
+		healthnumb.draw(window);
+
 		window.display();
 		deltaTime = clock.getElapsedTime();
-		if (player->getHealth() <= 0) { window.close(); }
-		if (mob->getHealth() <= 0) { window.close(); }
+		//if (player->getHealth() <= 0) { window.close(); }
+		//if (mob->getHealth() <= 0) { window.close(); }
 	}
 	timer.EndTime();
 	this->TimeInSec = timer.GetTime();
@@ -664,10 +678,10 @@ void Game::swapPlayerType()
 		currentId = id;
 		switch (currentId)
 		{
-		case 1: {delete player; player = new PlayerUsual(cx, cy, tmp_hp, tmp_dmg); }break;
-		case 2: {delete player; player = new PlayerSnake(cx, cy, tmp_hp, tmp_dmg); player->setDirection(dir); }break;
-		case 3: {delete player; player = new PlayerBoss(cx, cy, tmp_hp, tmp_dmg); }break;
-		case 4: {delete player; player = new PlayerInvisible(cx, cy, tmp_hp, tmp_dmg); }break;
+		case 1: {delete player; player = new PlayerBoss(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel_with_gun.png"); player->setScale(0.5, 0.5); }break;
+		case 2: {delete player; player = new PlayerSnake(cx, cy, tmp_hp, tmp_dmg); player->setSprite("tachka.png"); player->setDirection(dir); player->setScale(2, 2); }break;
+		case 3: {delete player; player = new PlayerUsual(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel.png"); player->setScale(0.5, 0.5); }break;
+		case 4: {delete player; player = new PlayerInvisible(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel.png"); player->setScale(0.5, 0.5); }break;
 		default:
 			break;
 		}

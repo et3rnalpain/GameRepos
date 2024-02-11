@@ -98,7 +98,8 @@ public:
 	int getDirection();
 	//sf::Vector2f getSpriteCenter();
 	sf::Sprite getSprite();
-
+	void setSprite(std::string filename);
+	void setScale(double x, double y);
 	bool CheckWall();
 };
 
