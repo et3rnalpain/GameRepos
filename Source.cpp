@@ -418,7 +418,7 @@ Mob::Mob()
 Mob::Mob(double x, double y)
 {
 	ix = x; iy = y;
-	mob_texture.loadFromFile("mob.jpg");
+	mob_texture.loadFromFile("boss.png");
 	mob_texture.setSmooth(true);
 	mob_sprite.setTexture(mob_texture);
 
