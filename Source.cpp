@@ -20,19 +20,19 @@ void Map::setId(int id)
 	{
 	case 1:
 	{
-		fon.makeSprite("fon1.png");
+		fon.makeSprite("fokinsky.png");
 	}break;
 	case 2:
 	{
-		fon.makeSprite("fon2.png");
+		fon.makeSprite("volodarka.png");
 	}break;
 	case 3:
 	{
-		fon.makeSprite("fon3.png");
+		fon.makeSprite("sovok.png");
 	}break;
 	case 4:
 	{
-		fon.makeSprite("fon4.png");
+		fon.makeSprite("bezhitsky.png");
 	}break;
 	}
 }
