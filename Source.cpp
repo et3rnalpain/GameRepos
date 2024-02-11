@@ -367,6 +367,14 @@ double Mob::getY() {
 	return this->y;
 }
 
+int Mob::getHealth() {
+	return this->health;
+}
+
+int Mob::getDamage() {
+	return this->damage;
+}
+
 void Mob::draw(sf::RenderWindow& window){
 	window.draw(mob_sprite);
 }
@@ -446,9 +454,16 @@ void Game::StartGameCycle()
 	}
 
 	Gui sword("sword.png", 0, 900);
-	//TextGui swordnumb(player->getDamage(), 40, 100, 900);
+	TextGui swordnumb(player->getDamage(), 40, 100, 900);
 	Gui health("heart.png", 150, 900);
-	//TextGui healthnumb(player->getHealth(), 40, 250, 900);
+	TextGui healthnumb(player->getHealth(), 40, 250, 900);
+
+	TextGui bossDamage(mob->getDamage(), 30, int(mob->getX())+20, int(mob->getY()-40));
+	Gui bossDamageSprite("sword.png", mob->getX(), mob->getY()-20);
+	bossDamageSprite.resize(0.2, 0.2);
+	TextGui bossHealth(mob->getHealth(), 30, int(mob->getX()) + 60, int(mob->getY()-40));
+	Gui bossHealthSprite("heart.png", mob->getX()+40, mob->getY()-20);
+	bossHealthSprite.resize(0.2, 0.2);
 
 	sf::Vector2f move_dir = sf::Vector2f(0.f, 0.f);
 	sf::Vector2f tmp_dir = sf::Vector2f(0.f, -1.f);
@@ -502,8 +517,14 @@ void Game::StartGameCycle()
 			}
 		}
 		
-		TextGui swordnumb(player->getDamage(), 40, 100, 900);
-		TextGui healthnumb(player->getHealth(), 40, 250, 900);
+		swordnumb.setstring(player->getDamage());
+		healthnumb.setstring(player->getHealth());
+
+		bossDamage.setPosition(int(mob->getX())+20, int(mob->getY() - 40));
+		bossHealth.setPosition(int(mob->getX()) + 60, int(mob->getY() - 40));
+		bossDamageSprite.setPosition(mob->getX(), mob->getY() - 20);
+		bossHealthSprite.setPosition(mob->getX()+40, mob->getY() - 20);
+		bossHealth.setstring(mob->getHealth());
 
 		player->movement(move_dir.x, move_dir.y);
 		player->checkPosition();
@@ -524,12 +545,18 @@ void Game::StartGameCycle()
 		swordnumb.draw(window);
 		health.draw(window);
 		healthnumb.draw(window);
+
+		bossDamageSprite.draw(window);
+		bossHealthSprite.draw(window);
+		bossDamage.draw(window);
+		bossHealth.draw(window);
+
 		bullet->draw(window);
 		player->draw(window);
 		mob->draw(window);
 		window.display();
 		deltaTime = clock.getElapsedTime();
-		if (player->getHealth() <= 0) { window.close(); }
+		//if (player->getHealth() <= 0) { window.close(); }
 	}
 	timer.EndTime();
 	this->TimeInSec = timer.GetTime();

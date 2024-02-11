@@ -25,6 +25,10 @@ public:
 	}
 	void makeSprite(std::string filename);
 	void draw(sf::RenderWindow& window);
+	void resize(float w, float h)
+	{
+		Sprite.setScale(sf::Vector2f(w, h));
+	}
 	sf::Sprite getSprite();
 };
 
@@ -239,6 +243,10 @@ public:
 	void setPosition(int x, int y)
 	{
 		text.setPosition(sf::Vector2f(x, y));
+	}
+	void setColor(sf::Color color)
+	{
+		text.setFillColor(color);
 	}
 	void draw(sf::RenderWindow& window);
 };
