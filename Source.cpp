@@ -544,10 +544,14 @@ void Game::StartGameCycle()
 		if (maps[i].getId() == 1) mob = new Mob(maps[i].getX() + 100, maps[i].getY() + 100);
 	}
 
-	Gui sword("sword.png", 0, 900);
-	TextGui swordnumb(player->getDamage(), 40, 100, 900);
-	Gui health("heart.png", 150, 900);
-	TextGui healthnumb(player->getHealth(), 40, 250, 900);
+	TextGui swordnumb(player->getDamage(), 20, player->getX()+20, player->getY()-40);
+	swordnumb.setColor(sf::Color::Black);
+	Gui sword("sword.png", player->getX(), player->getY()-20);
+	sword.resize(0.2, 0.2);
+	TextGui healthnumb(player->getHealth(), 20, player->getX()+60, player->getY()-40);
+	healthnumb.setColor(sf::Color::Black);
+	Gui health("heart.png", player->getX()+40, player->getY()-20);
+	health.resize(0.2, 0.2);
 
 	TextGui bossDamage(mob->getDamage(), 30, int(mob->getX())+20, int(mob->getY()-40));
 	Gui bossDamageSprite("sword.png", mob->getX(), mob->getY()-20);
@@ -608,6 +612,11 @@ void Game::StartGameCycle()
 			}
 		}
 		
+
+		sword.setPosition(player->getX() - 30, player->getY() - 40);
+		swordnumb.setPosition(player->getX() - 10, player->getY() - 40);
+		health.setPosition(player->getX() + 20, player->getY() - 40);
+		healthnumb.setPosition(player->getX() + 40, player->getY() - 40);
 		swordnumb.setstring(player->getDamage());
 		healthnumb.setstring(player->getHealth());
 
