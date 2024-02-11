@@ -658,8 +658,8 @@ void Game::StartGameCycle()
 
 		window.display();
 		deltaTime = clock.getElapsedTime();
-		//if (player->getHealth() <= 0) { window.close(); }
-		//if (mob->getHealth() <= 0) { window.close(); }
+		if (player->getHealth() <= 0) { window.close(); }
+		if (mob->getHealth() <= 0) { window.close(); }
 	}
 	timer.EndTime();
 	this->TimeInSec = timer.GetTime();
@@ -786,7 +786,7 @@ double Buff::getY() { return y; }
 
 Damage::Damage() 
 {
-	buff_texture.loadFromFile("buff1.png");
+	buff_texture.loadFromFile("brass_knuckles.png");
 	buff_texture.setSmooth(true);
 	buff_sprite.setTexture(buff_texture);
 	buff_sprite.setPosition(sf::Vector2f(x, y));
@@ -794,7 +794,7 @@ Damage::Damage()
 
 Health::Health()
 {
-	buff_texture.loadFromFile("buff2.png");
+	buff_texture.loadFromFile("pill.png");
 	buff_texture.setSmooth(true);
 	buff_sprite.setTexture(buff_texture);
 	buff_sprite.setPosition(sf::Vector2f(x, y));
