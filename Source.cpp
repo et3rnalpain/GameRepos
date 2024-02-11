@@ -637,8 +637,8 @@ void Game::StartGameCycle()
 
 		window.display();
 		deltaTime = clock.getElapsedTime();
-		if (player->getHealth() <= 0) { window.close(); }
-		if (mob->getHealth() <= 0) { window.close(); }
+		//if (player->getHealth() <= 0) { window.close(); }
+		//if (mob->getHealth() <= 0) { window.close(); }
 	}
 	timer.EndTime();
 	this->TimeInSec = timer.GetTime();
