@@ -134,6 +134,18 @@ void Player::movement(double direction_x, double direction_y)
 	else if (direction_x == -1.f && direction_y == 0.f) {
 		player_sprite.setRotation(90);
 	}
+	else if (direction_x == -0.6f && direction_y == 0.6f) {
+		player_sprite.setRotation(45);
+	}
+	else if (direction_x == -0.6f && direction_y == -0.6f) {
+		player_sprite.setRotation(325);
+	}
+	else if (direction_x == 0.6f && direction_y == -0.6f) {
+		player_sprite.setRotation(225);
+	}
+	else if (direction_x == 0.6f && direction_y == 0.6f) {
+		player_sprite.setRotation(135);
+	}
 
 	this->movement_vector.x += direction_x * this->acceleration;
 	this->movement_vector.y += direction_y * this->acceleration;
