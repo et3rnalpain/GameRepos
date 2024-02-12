@@ -520,28 +520,49 @@ void Game::MainMenu()
 	sf::Event event;
 
 	Gui fon("fon4ik.png", 0, 0);
-	
+
+	Gui krestStart("krest.png", 350, 265);
+	Gui krestQuit("krest.png", 385, 370);
+	int switchKrerst = 0;
+
 	sf::RectangleShape rectStart(sf::Vector2f(450, 75));
 	rectStart.setSize(sf::Vector2f(450, 75));
-	rectStart.setPosition(415, 300);
-	rectStart.setFillColor(sf::Color(100, 0, 0, 100));
+	rectStart.setPosition(415, 290);
+	rectStart.setFillColor(sf::Color(0, 100, 0, 0));
 	Sound menu1("gta-menu.wav", 50);
+
+	sf::RectangleShape rectQuit(sf::Vector2f(450, 75));
+	rectQuit.setSize(sf::Vector2f(450, 75));
+	rectQuit.setPosition(415, 390);
+	rectQuit.setFillColor(sf::Color(100, 0, 0, 0));
 
 	
 	while (window.isOpen())
 	{
-		
-
-
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::MouseButtonPressed && 
+			if (event.type == sf::Event::MouseButtonPressed &&
 				((sf::Mouse::getPosition(window).x >= rectStart.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectStart.getPosition().x + 450)) &&
 				((sf::Mouse::getPosition(window).y >= rectStart.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectStart.getPosition().y + 75)))
+			{
 				menu1.play();
+				switchKrerst = 1;
+			}
+			if (event.type == sf::Event::MouseButtonPressed &&
+				((sf::Mouse::getPosition(window).x >= rectQuit.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectQuit.getPosition().x + 450)) &&
+				((sf::Mouse::getPosition(window).y >= rectQuit.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectQuit.getPosition().y + 75)))
+			{
+				menu1.play();
+				switchKrerst = 2;
+			}
 		}
 		fon.draw(window);
+		if (switchKrerst == 1)
+			krestStart.draw(window);
+		if (switchKrerst == 2)
+			krestQuit.draw(window);
 		window.draw(rectStart);
+		window.draw(rectQuit);
 		window.display();
 	}
 }
