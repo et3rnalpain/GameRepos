@@ -524,23 +524,21 @@ void Game::MainMenu()
 	sf::RectangleShape rectStart(sf::Vector2f(450, 75));
 	rectStart.setSize(sf::Vector2f(450, 75));
 	rectStart.setPosition(415, 300);
-	//rectStart.setTexture(NULL);
-	rectStart.setFillColor(sf::Color(0, 0, 0, 0));
+	rectStart.setFillColor(sf::Color(100, 0, 0, 100));
 	Sound menu1("gta-menu.wav", 50);
 
-
+	
 	while (window.isOpen())
 	{
-		if (((sf::Mouse::getPosition().x >= rectStart.getPosition().x) && (sf::Mouse::getPosition().x <= rectStart.getPosition().x + rectStart.getTextureRect().width)) &&
-			((sf::Mouse::getPosition().y >= rectStart.getPosition().y) && (sf::Mouse::getPosition().y <= rectStart.getPosition().y + rectStart.getTextureRect().height)))
+		if (((sf::Mouse::getPosition().x >= rectStart.getPosition().x) && (sf::Mouse::getPosition().x <= rectStart.getPosition().x + 450)) &&
+			((sf::Mouse::getPosition().y >= rectStart.getPosition().y) && (sf::Mouse::getPosition().y <= rectStart.getPosition().y + 75)))
 			menu1.play();
+
 
 		while (window.pollEvent(event))
 		{
 
-			/*if (((sf::Mouse::getPosition().x >= rectStart.getPosition().x) && (sf::Mouse::getPosition().x <= rectStart.getPosition().x + rectStart.getTextureRect().width)) &&
-				((sf::Mouse::getPosition().y >= rectStart.getPosition().y) && (sf::Mouse::getPosition().y <= rectStart.getPosition().y + rectStart.getTextureRect().height)))
-				menu1.play();*/
+			
 
 
 
