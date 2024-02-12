@@ -536,17 +536,37 @@ void Game::MainMenu()
 	rectQuit.setPosition(415, 390);
 	rectQuit.setFillColor(sf::Color(100, 0, 0, 0));
 
-	
+	bool menu_flag = false;
+
 	while (window.isOpen())
 	{
+		if (((sf::Mouse::getPosition(window).x >= rectStart.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectStart.getPosition().x + 450)) &&
+			((sf::Mouse::getPosition(window).y >= rectStart.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectStart.getPosition().y + 75)))
+		{
+			if (!menu_flag) {
+				menu1.play();
+				switchKrerst = 1;
+				menu_flag = true;
+			}
+		}
+		else if (((sf::Mouse::getPosition(window).x >= rectQuit.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectQuit.getPosition().x + 450)) &&
+			((sf::Mouse::getPosition(window).y >= rectQuit.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectQuit.getPosition().y + 75)))
+		{
+			if (!menu_flag) {
+				menu1.play();
+				switchKrerst = 2;
+				menu_flag = true;
+			}
+		}
+		else menu_flag = false;
+
 		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::MouseButtonPressed &&
 				((sf::Mouse::getPosition(window).x >= rectStart.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectStart.getPosition().x + 450)) &&
 				((sf::Mouse::getPosition(window).y >= rectStart.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectStart.getPosition().y + 75)))
 			{
-				menu1.play();
-				switchKrerst = 1;
+				window.close();
 			}
 			if (event.type == sf::Event::MouseButtonPressed &&
 				((sf::Mouse::getPosition(window).x >= rectQuit.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectQuit.getPosition().x + 450)) &&
