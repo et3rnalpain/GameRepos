@@ -530,33 +530,15 @@ void Game::MainMenu()
 	
 	while (window.isOpen())
 	{
-		if (((sf::Mouse::getPosition().x >= rectStart.getPosition().x) && (sf::Mouse::getPosition().x <= rectStart.getPosition().x + 450)) &&
-			((sf::Mouse::getPosition().y >= rectStart.getPosition().y) && (sf::Mouse::getPosition().y <= rectStart.getPosition().y + 75)))
-			menu1.play();
+		
 
 
 		while (window.pollEvent(event))
 		{
-
-			
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			
+			if (event.type == sf::Event::MouseButtonPressed && 
+				((sf::Mouse::getPosition(window).x >= rectStart.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectStart.getPosition().x + 450)) &&
+				((sf::Mouse::getPosition(window).y >= rectStart.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectStart.getPosition().y + 75)))
+				menu1.play();
 		}
 		fon.draw(window);
 		window.draw(rectStart);
