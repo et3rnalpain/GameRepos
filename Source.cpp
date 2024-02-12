@@ -511,6 +511,45 @@ void Mob::tookDamage(Player* p){
 /* Игра */
 
 class Game;
+void Game::MainMenu()
+{
+	int w = 1080;
+	int h = 716;
+	window.create(sf::VideoMode(w, h), "Game");
+	window.setFramerateLimit(144);
+	sf::Event event;
+
+	Gui fon("fonMenu.png", 0, 0);
+	
+	while (window.isOpen())
+	{
+		while (window.pollEvent(event))
+		{
+			
+
+
+
+
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+			fon.draw(window);
+			window.display();
+		}
+	}
+}
+
 void Game::StartGameCycle()
 {
 	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Game");

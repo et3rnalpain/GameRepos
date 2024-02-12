@@ -213,6 +213,7 @@ private:
 	Mob* mob;
 	int currentId;
 public:
+	void MainMenu();
 	void StartGameCycle();
 	void StartTimeCycle();
 	void regenerateBuff();
