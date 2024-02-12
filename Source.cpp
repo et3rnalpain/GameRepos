@@ -543,7 +543,8 @@ void Game::MainMenu()
 		if (((sf::Mouse::getPosition(window).x >= rectStart.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectStart.getPosition().x + 450)) &&
 			((sf::Mouse::getPosition(window).y >= rectStart.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectStart.getPosition().y + 75)))
 		{
-			if (!menu_flag) {
+			if (!menu_flag) 
+			{
 				menu1.play();
 				switchKrerst = 1;
 				menu_flag = true;
@@ -552,7 +553,8 @@ void Game::MainMenu()
 		else if (((sf::Mouse::getPosition(window).x >= rectQuit.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectQuit.getPosition().x + 450)) &&
 			((sf::Mouse::getPosition(window).y >= rectQuit.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectQuit.getPosition().y + 75)))
 		{
-			if (!menu_flag) {
+			if (!menu_flag) 
+			{
 				menu1.play();
 				switchKrerst = 2;
 				menu_flag = true;
@@ -562,6 +564,10 @@ void Game::MainMenu()
 
 		while (window.pollEvent(event))
 		{
+			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) 
+			{
+				exit(1);
+			}
 			if (event.type == sf::Event::MouseButtonPressed &&
 				((sf::Mouse::getPosition(window).x >= rectStart.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectStart.getPosition().x + 450)) &&
 				((sf::Mouse::getPosition(window).y >= rectStart.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectStart.getPosition().y + 75)))
