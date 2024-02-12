@@ -572,10 +572,10 @@ void Game::MainMenu()
 				((sf::Mouse::getPosition(window).x >= rectQuit.getPosition().x) && (sf::Mouse::getPosition(window).x <= rectQuit.getPosition().x + 450)) &&
 				((sf::Mouse::getPosition(window).y >= rectQuit.getPosition().y) && (sf::Mouse::getPosition(window).y <= rectQuit.getPosition().y + 75)))
 			{
-				menu1.play();
-				switchKrerst = 2;
+				exit(1);
 			}
 		}
+
 		fon.draw(window);
 		if (switchKrerst == 1)
 			krestStart.draw(window);
