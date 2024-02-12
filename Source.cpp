@@ -513,47 +513,63 @@ void Mob::tookDamage(Player* p){
 class Game;
 void Game::MainMenu()
 {
-	int w = 1080;
-	int h = 716;
-	window.create(sf::VideoMode(w, h), "Game");
+	int w = 1280;
+	int h = 800;
+	window.create(sf::VideoMode(w, h), "Menu");
 	window.setFramerateLimit(144);
 	sf::Event event;
 
-	Gui fon("fonMenu.png", 0, 0);
+	Gui fon("fon4ik.png", 0, 0);
 	
+	sf::RectangleShape rectStart(sf::Vector2f(450, 75));
+	rectStart.setSize(sf::Vector2f(450, 75));
+	rectStart.setPosition(415, 300);
+	//rectStart.setTexture(NULL);
+	rectStart.setFillColor(sf::Color(0, 0, 0, 0));
+	Sound menu1("gta-menu.wav", 50);
+
+
 	while (window.isOpen())
 	{
+		if (((sf::Mouse::getPosition().x >= rectStart.getPosition().x) && (sf::Mouse::getPosition().x <= rectStart.getPosition().x + rectStart.getTextureRect().width)) &&
+			((sf::Mouse::getPosition().y >= rectStart.getPosition().y) && (sf::Mouse::getPosition().y <= rectStart.getPosition().y + rectStart.getTextureRect().height)))
+			menu1.play();
+
 		while (window.pollEvent(event))
 		{
+
+			/*if (((sf::Mouse::getPosition().x >= rectStart.getPosition().x) && (sf::Mouse::getPosition().x <= rectStart.getPosition().x + rectStart.getTextureRect().width)) &&
+				((sf::Mouse::getPosition().y >= rectStart.getPosition().y) && (sf::Mouse::getPosition().y <= rectStart.getPosition().y + rectStart.getTextureRect().height)))
+				menu1.play();*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			
-
-
-
-
-
-			
-
-
-
-
-
-
-
-
-
-
-
-
-			fon.draw(window);
-			window.display();
 		}
+		fon.draw(window);
+		window.draw(rectStart);
+		window.display();
 	}
 }
 
 void Game::StartGameCycle()
 {
 	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Game");
-	window.setFramerateLimit(144);
+	window.setFramerateLimit(60);
 	int array[4] = { 1,2,3,4 };
 	std::random_shuffle(&array[0], &array[3]);
 	for (int i = 0; i < 4; i++)
