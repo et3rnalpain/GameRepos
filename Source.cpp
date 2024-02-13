@@ -20,19 +20,19 @@ void Map::setId(int id)
 	{
 	case 1:
 	{
-		fon.makeSprite("fokinsky.png");
+		fon.makeSpriteSized("fokinsky.png");
 	}break;
 	case 2:
 	{
-		fon.makeSprite("volodarka.png");
+		fon.makeSpriteSized("volodarka.png");
 	}break;
 	case 3:
 	{
-		fon.makeSprite("sovok.png");
+		fon.makeSpriteSized("sovok.png");
 	}break;
 	case 4:
 	{
-		fon.makeSprite("bezhitsky.png");
+		fon.makeSpriteSized("bezhitsky.png");
 	}break;
 	}
 }
@@ -850,8 +850,8 @@ class Damage;
 
 Buff::Buff() 
 {
-	x = rand() % 900 + 50;
-	y = rand() % 900 + 50;
+	x = rand() % (SCREEN_WIDTH - 100) + 50;
+	y = rand() % (SCREEN_HEIGHT - 100) + 50;
 }
 
 void Buff::draw(sf::RenderWindow& window)
@@ -919,6 +919,13 @@ void Gui::makeSprite(std::string filename)
 	Texture.loadFromFile(filename);
 	Sprite.setTexture(Texture);
 };
+
+void Gui::makeSpriteSized(std::string filename)
+{
+	Texture.loadFromFile(filename);
+	Sprite.setTexture(Texture);
+	Sprite.setScale((SCREEN_WIDTH / 2) / 500.0, (SCREEN_HEIGHT / 2) / 500.0);
+}
 
 sf::Sprite Gui::getSprite() { return Sprite; }
 

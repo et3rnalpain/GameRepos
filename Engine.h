@@ -24,6 +24,7 @@ public:
 		Sprite.setPosition(sf::Vector2f(x, y));
 	}
 	void makeSprite(std::string filename);
+	void makeSpriteSized(std::string filename);
 	void draw(sf::RenderWindow& window);
 	void resize(float w, float h)
 	{
