@@ -778,7 +778,7 @@ void Game::StartGameCycle()
 void Game::StartTimeCycle()
 {
 	Sound opa("opa.wav", 50);
-	int w = 500, h = 200;
+	int w = 700, h = 500;
 	sf::Event event; sf::Font font;
 	std::string Mess = "Your time is ";
 	std::string StTime;
@@ -788,9 +788,19 @@ void Game::StartTimeCycle()
 	StTime = std::to_string(TimeInSec);
 	Mess += StTime;
 	Mess += " sec.";
+	if(player->getHealth() <= 0)
+	{
 
-	TextGui text(Mess, 40, w / 2 - 150, h / 2 - 40);
-	Gui BackGround("BackGroundTime.png", 0, 0);
+		TextGui text(Mess, 40, w / 3 + 120, h / 2 + h / 3);
+		text.setColor(sf::Color(255, 255, 255));
+		Gui BackGround("BackGroundTime.png", 0, 0);
+	}
+	else
+	{
+		TextGui text(Mess, 40, w / 3 + 120, h / 2 + h / 3);
+		text.setColor(sf::Color(255, 2, 255));
+		Gui BackGround("BackGroundTime.png", 0, 0);
+	}
 
 	opa.play();
 	while (TimeWindow.isOpen())
