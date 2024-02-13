@@ -918,8 +918,8 @@ void Health::BuffPlayer(Player& player)
 	{
 		isActive = false;
 		player.addHealth(10);
-		Sound snd("health.wav", 50);
-		snd.play();
+		//Sound* snd = new Sound("health.wav", 50);
+		//snd.play();
 	}
 }
 
