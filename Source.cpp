@@ -936,7 +936,7 @@ Damage::Damage()
 	buff_texture.setSmooth(true);
 	buff_sprite.setTexture(buff_texture);
 	buff_sprite.setPosition(sf::Vector2f(x, y));
-	snd = new Sound("knife_stab.wav", 50);
+	snd = new Sound("punch.wav", 30);
 }
 
 void Damage::BuffPlayer(Player& player) 
