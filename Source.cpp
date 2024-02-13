@@ -645,7 +645,8 @@ void Game::StartGameCycle()
 	sf::Vector2f move_dir = sf::Vector2f(0.f, 0.f);
 	sf::Vector2f tmp_dir = sf::Vector2f(0.f, -1.f);
 
-	TextGui Timer(100, 100, 0, 0);
+	TextGui Timer(100, 50, SCREEN_WIDTH/2-25, 0);
+	Timer.setColor(sf::Color::Black);
 	
 	Music fon("fon.flac", 20, 1);
 	Sound shoot("shoot.wav", 50);
@@ -748,6 +749,7 @@ void Game::StartGameCycle()
 		window.display();
 		deltaTime = clock.getElapsedTime();
 		if (player->getHealth() <= 0) { window.close(); }
+		if (timer.StartTimer() <= 0) { window.close(); }
 		if (mob->getHealth() <= 0) { window.close(); }
 	}
 	timer.EndTime();
