@@ -899,6 +899,7 @@ Damage::Damage()
 	buff_texture.setSmooth(true);
 	buff_sprite.setTexture(buff_texture);
 	buff_sprite.setPosition(sf::Vector2f(x, y));
+	snd = new Sound("knife_stab.wav", 50);
 }
 
 void Damage::BuffPlayer(Player& player) 
@@ -907,8 +908,7 @@ void Damage::BuffPlayer(Player& player)
 	{
 		isActive = false;
 		player.addDamage(5);
-		Sound snd("knife_stab.wav", 50);
-		snd.play();
+		snd->play();
 	}
 }
 
@@ -918,6 +918,7 @@ void Health::BuffPlayer(Player& player)
 	{
 		isActive = false;
 		player.addHealth(10);
+		snd->play();
 	}
 }
 
@@ -927,6 +928,7 @@ Health::Health()
 	buff_texture.setSmooth(true);
 	buff_sprite.setTexture(buff_texture);
 	buff_sprite.setPosition(sf::Vector2f(x, y));
+	snd = new Sound("health.wav", 50);
 }
 
 /* Таймер */

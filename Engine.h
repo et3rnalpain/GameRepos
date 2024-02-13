@@ -171,12 +171,13 @@ public:
 	sf::Vector2f getSpriteCenter();
 	void tookDamage(Player* p);
 };
-
+class Sound;
 class Buff //класс зелек (увеличение хп и урона)
 {
 protected:
 	sf::Texture buff_texture;
 	sf::Sprite buff_sprite;
+	Sound* snd;
 	double x, y;
 	bool isActive;
 public:
