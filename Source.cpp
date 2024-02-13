@@ -411,8 +411,8 @@ Mob::Mob()
 	mob_texture.setSmooth(true);
 	mob_sprite.setTexture(mob_texture);
 
-	this->health = 100;
-	this->damage = 9;
+	this->health = 500;
+	this->damage = 25;
 	this->acceleration = 1.2;
 
 	x = rand() % ((SCREEN_WIDTH - 100) - 100 + 1) + 100;
@@ -432,8 +432,8 @@ Mob::Mob(double x, double y)
 	mob_texture.setSmooth(true);
 	mob_sprite.setTexture(mob_texture);
 
-	this->health = 100;
-	this->damage = 9;
+	this->health = 500;
+	this->damage = 25;
 	this->acceleration = 1.2;
 
 	this->x = x;
