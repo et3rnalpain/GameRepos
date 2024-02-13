@@ -183,6 +183,9 @@ bool Player::CheckWall()
 }
 
 void Player::tookDamage(Mob* m){
+	Sound stab("knife_stab.wav", 50);
+	stab.play();
+
 	if (damage_taken == false) {
 		this->health -= m->getDamage();
 		this->damage_taken = true;
@@ -774,6 +777,7 @@ void Game::StartGameCycle()
 
 void Game::StartTimeCycle()
 {
+	Sound opa("opa.wav", 50);
 	int w = 500, h = 200;
 	sf::Event event; sf::Font font;
 	std::string Mess = "Your time is ";
@@ -788,6 +792,7 @@ void Game::StartTimeCycle()
 	TextGui text(Mess, 40, w / 2 - 150, h / 2 - 40);
 	Gui BackGround("BackGroundTime.png", 0, 0);
 
+	opa.play();
 	while (TimeWindow.isOpen())
 	{
 		while (TimeWindow.pollEvent(event))

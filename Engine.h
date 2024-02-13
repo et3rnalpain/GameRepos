@@ -71,6 +71,7 @@ public:
 	void removeBullet();
 };
 
+class Sound;
 class Mob;
 class Player //класс игрока абстрактный
 {
