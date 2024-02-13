@@ -183,9 +183,6 @@ bool Player::CheckWall()
 }
 
 void Player::tookDamage(Mob* m){
-	Sound stab("knife_stab.wav", 50);
-	stab.play();
-
 	if (damage_taken == false) {
 		this->health -= m->getDamage();
 		this->damage_taken = true;
