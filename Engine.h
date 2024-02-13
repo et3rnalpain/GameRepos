@@ -201,6 +201,7 @@ public:
 	//void BuffPlayer(Player& player) override;
 };
 
+class Sound;
 class Game //класс игры (тут вся отрисовка и тд)
 {
 private:
@@ -220,7 +221,7 @@ public:
 	void regenerateBuff();
 	bool isBuffsInCollision(Buff* buff1, Buff* buff2);
 	int checkCurrId();
-	void swapPlayerType();
+	void swapPlayerType(Sound z1, Sound z2, Sound z3, Sound z4);
 };
 
 
