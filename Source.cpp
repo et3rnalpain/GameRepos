@@ -645,6 +645,7 @@ void Game::StartGameCycle()
 	sf::Vector2f move_dir = sf::Vector2f(0.f, 0.f);
 	sf::Vector2f tmp_dir = sf::Vector2f(0.f, -1.f);
 
+	TextGui Timer(100, 100, 0, 0);
 	
 	Music fon("fon.flac", 20, 1);
 	Sound shoot("shoot.wav", 50);
@@ -653,6 +654,7 @@ void Game::StartGameCycle()
 	window.setVerticalSyncEnabled(true);
 	while (window.isOpen())
 	{
+		Timer.setstring(timer.StartTimer());
 		clock.restart();
 		swapPlayerType();
 		while (window.pollEvent(event))
@@ -740,6 +742,8 @@ void Game::StartGameCycle()
 		swordnumb.draw(window);
 		health.draw(window);
 		healthnumb.draw(window);
+
+		Timer.draw(window);
 
 		window.display();
 		deltaTime = clock.getElapsedTime();
@@ -902,6 +906,11 @@ void Timer::EndTime()
 int Timer::GetTime()
 {
 	return seconds;
+}
+
+int Timer::StartTimer()
+{
+	return 100 - static_cast<unsigned int>(clock.getElapsedTime().asSeconds());
 }
 
 /* Спрайты */

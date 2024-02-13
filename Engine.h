@@ -233,6 +233,8 @@ public:
 	void StartTime();
 	void EndTime();
 	int GetTime();
+
+	int StartTimer();
 };
 
 
