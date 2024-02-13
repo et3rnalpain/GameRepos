@@ -907,6 +907,8 @@ void Damage::BuffPlayer(Player& player)
 	{
 		isActive = false;
 		player.addDamage(5);
+		Sound snd("knife_stab.wav", 50);
+		snd.play();
 	}
 }
 
@@ -916,6 +918,8 @@ void Health::BuffPlayer(Player& player)
 	{
 		isActive = false;
 		player.addHealth(10);
+		Sound snd("health.wav", 50);
+		snd.play();
 	}
 }
 

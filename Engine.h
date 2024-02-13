@@ -187,7 +187,16 @@ public:
 	double getX();
 	double getY();
 };
-
+class Sound
+{
+private:
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
+public:
+	Sound(std::string namefile, int volume);
+	void ChangeVolume(int volume);
+	void play();
+};
 class Health : public Buff
 {
 private:
@@ -206,7 +215,7 @@ public:
 	void BuffPlayer(Player& player) override;
 };
 
-class Sound;
+
 class Game //класс игры (тут вся отрисовка и тд)
 {
 private:
@@ -265,16 +274,7 @@ public:
 	void draw(sf::RenderWindow& window);
 };
 
-class Sound
-{
-private:
-	sf::SoundBuffer buffer;
-	sf::Sound sound;
-public:
-	Sound(std::string namefile, int volume);
-	void ChangeVolume(int volume);
-	void play();
-};
+
 
 class Music
 {
