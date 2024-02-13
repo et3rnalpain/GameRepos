@@ -98,6 +98,10 @@ public:
 	int getHealth();
 	int getDamage();
 	int getDirection();
+	void addDamage(double add);
+	void addHealth(double add);
+
+	
 	//sf::Vector2f getSpriteCenter();
 	sf::Sprite getSprite();
 	void setSprite(std::string filename);
@@ -174,9 +178,10 @@ protected:
 	sf::Texture buff_texture;
 	sf::Sprite buff_sprite;
 	double x, y;
+	bool isActive;
 public:
 	Buff();
-	//virtual void BuffPlayer(Player& player);
+	virtual void BuffPlayer(Player& player);
 	virtual void draw(sf::RenderWindow& window);
 	void setPosition(double x, double y);
 	double getX();
@@ -189,7 +194,7 @@ private:
 	int bonus = 5;
 public:
 	Health();
-	//void BuffPlayer(Player& player) override;
+	void BuffPlayer(Player& player) override;
 };
 
 class Damage : public Buff
@@ -198,7 +203,7 @@ private:
 	int bonus = 5;
 public:
 	Damage();
-	//void BuffPlayer(Player& player) override;
+	void BuffPlayer(Player& player) override;
 };
 
 class Sound;

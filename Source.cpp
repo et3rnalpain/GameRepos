@@ -246,6 +246,16 @@ void Player::setScale(double x, double y){
 	this->player_sprite.setScale(x, y);
 }
 
+void Player::addDamage(double add) 
+{
+	damage += add;
+}
+
+void Player::addHealth(double add)
+{
+	health += add;
+}
+
 /* Наследники класса Игрок */
 
 class PlayerUsual; //Обычный
@@ -732,6 +742,7 @@ void Game::StartGameCycle()
 		for (int i = 0; i < 15; i++)
 		{
 			buffs[i]->draw(window);
+			buffs[i]->BuffPlayer(*player);
 		}
 
 		bossDamageSprite.draw(window);
@@ -862,11 +873,12 @@ Buff::Buff()
 {
 	x = rand() % (SCREEN_WIDTH - 100) + 50;
 	y = rand() % (SCREEN_HEIGHT - 100) + 50;
+	isActive = true;
 }
 
 void Buff::draw(sf::RenderWindow& window)
 {
-	window.draw(buff_sprite);
+	if(isActive) window.draw(buff_sprite);
 }
 
 void Buff::setPosition(double x, double y) 
@@ -875,6 +887,8 @@ void Buff::setPosition(double x, double y)
 	this->y = y;
 	buff_sprite.setPosition(x, y);
 }
+
+void Buff::BuffPlayer(Player& player) {}
 
 double Buff::getX() { return x; }
 double Buff::getY() { return y; }
@@ -885,6 +899,24 @@ Damage::Damage()
 	buff_texture.setSmooth(true);
 	buff_sprite.setTexture(buff_texture);
 	buff_sprite.setPosition(sf::Vector2f(x, y));
+}
+
+void Damage::BuffPlayer(Player& player) 
+{
+	if (isActive && player.getX() >= x && player.getX() <= x + buff_sprite.getTextureRect().width && player.getY() >= y && player.getY() <= y + buff_sprite.getTextureRect().height) 
+	{
+		isActive = false;
+		player.addDamage(5);
+	}
+}
+
+void Health::BuffPlayer(Player& player)
+{
+	if (isActive && player.getX() >= x && player.getX() <= x + buff_sprite.getTextureRect().width && player.getY() >= y && player.getY() <= y + buff_sprite.getTextureRect().height)
+	{
+		isActive = false;
+		player.addHealth(10);
+	}
 }
 
 Health::Health()
