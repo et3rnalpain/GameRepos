@@ -701,14 +701,15 @@ void Game::StartGameCycle()
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 				move_dir.x = -1; move_dir.y = 0; tmp_dir = move_dir;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
-				player->addHealth(5);
-			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
-				player->addDamage(5);
-			}
 			else {
 				move_dir.x = 0; move_dir.y = 0;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+				player->addHealth(5);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
+				player->addDamage(5);
 			}
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->checkCurrId() == 1) {
