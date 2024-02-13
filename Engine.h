@@ -221,7 +221,7 @@ public:
 	void regenerateBuff();
 	bool isBuffsInCollision(Buff* buff1, Buff* buff2);
 	int checkCurrId();
-	void swapPlayerType(Sound z1, Sound z2, Sound z3, Sound z4);
+	void swapPlayerType(Sound* z1, Sound* z2, Sound* z3, Sound* z4);
 };
 
 
