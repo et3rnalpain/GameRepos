@@ -649,7 +649,7 @@ void Game::StartGameCycle()
 	Timer.setColor(sf::Color::Black);
 	
 	Music fon("fon.flac", 20, 1);
-	Sound shoot("shoot.wav", 50);
+	Sound shoot("zvuk_vystrel .wav", 20);
 
 	fon.play();
 	window.setVerticalSyncEnabled(true);
