@@ -734,7 +734,6 @@ void Game::StartGameCycle()
 		bullet->movement();
 		bullet->checkPosition();
 		mob->updateCondition(player, bullet);
-		if (!player->CheckWall()) window.close();
 		for (int i = 0; i < 4; i++)
 		{
 			maps[i].fon.draw(window);
@@ -766,6 +765,11 @@ void Game::StartGameCycle()
 		if (player->getHealth() <= 0) { window.close(); }
 		if (timer.StartTimer() <= 0) { window.close(); }
 		if (mob->getHealth() <= 0) { window.close(); }
+		if (!player->CheckWall())
+		{
+			window.close();
+			player->addHealth(-player->getHealth());
+		}
 	}
 	timer.EndTime();
 	this->TimeInSec = timer.GetTime();
@@ -790,29 +794,44 @@ void Game::StartTimeCycle()
 
 		TextGui text(Mess, 40, w / 3 + 120, h / 2 + h / 3);
 		text.setColor(sf::Color(255, 255, 255));
-		Gui BackGround("BackGroundTime.png", 0, 0);
+		Gui BackGround("lose.png", 0, 0);
+		opa.play();
+		while (TimeWindow.isOpen())
+		{
+			while (TimeWindow.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				{
+					TimeWindow.close();
+				}
+			}
+			BackGround.draw(TimeWindow);
+			text.draw(TimeWindow);
+			TimeWindow.display();
+		}
 	}
 	else
 	{
-		TextGui text(Mess, 40, w / 3 + 120, h / 2 + h / 3);
-		text.setColor(sf::Color(255, 2, 255));
-		Gui BackGround("BackGroundTime.png", 0, 0);
+		TextGui text(Mess, 40, w / 4, h / 2 + h / 3);
+		text.setColor(sf::Color(255, 255, 255));
+		Gui BackGround("win.png", 0, 0);
+		opa.play();
+		while (TimeWindow.isOpen())
+		{
+			while (TimeWindow.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				{
+					TimeWindow.close();
+				}
+			}
+			BackGround.draw(TimeWindow);
+			text.draw(TimeWindow);
+			TimeWindow.display();
+		}
 	}
 
-	opa.play();
-	while (TimeWindow.isOpen())
-	{
-		while (TimeWindow.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-			{
-				TimeWindow.close();
-			}
-		}
-		BackGround.draw(TimeWindow);
-		text.draw(TimeWindow);
-		TimeWindow.display();
-	}
+	
 }
 
 int Game::checkCurrId()
