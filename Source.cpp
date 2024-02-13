@@ -660,10 +660,10 @@ void Game::StartGameCycle()
 	
 	Music fon("fon.flac", 20, 1);
 	Sound shoot("zvuk_vystrel .wav", 20);
-	Sound zone_fokinka("zvuk_drobovika.wav", 20);
-	Sound zone_sovok("zvuk_kurtki.wav", 20);
-	Sound zone_volodarka("zvuk_motora.wav", 20);
-	Sound zone_bezhitsa("zvuk_shponka.wav", 20);
+	Sound* zone_fokinka = new Sound("zvuk_drobovika.wav", 60);
+	Sound* zone_sovok = new Sound("zvuk_kurtki.wav", 20);
+	Sound* zone_volodarka = new Sound("zvuk_motora.wav", 20);
+	Sound* zone_bezhitsa = new Sound("zvuk_shponka.wav", 20);
 
 	fon.play();
 	window.setVerticalSyncEnabled(true);
@@ -817,7 +817,7 @@ int Game::checkCurrId()
 	return id;
 }
 
-void Game::swapPlayerType(Sound z1, Sound z2, Sound z3, Sound z4)
+void Game::swapPlayerType(Sound* z1, Sound* z2, Sound* z3, Sound* z4)
 {
 	double cx = player->getX(), cy = player->getY();
 	int tmp_hp = player->getHealth(), tmp_dmg = player->getDamage();
@@ -828,10 +828,10 @@ void Game::swapPlayerType(Sound z1, Sound z2, Sound z3, Sound z4)
 		currentId = id;
 		switch (currentId)
 		{
-		case 1: {delete player; player = new PlayerBoss(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel_with_gun.png"); player->setScale(0.5, 0.5); z1.play(); }break;
-		case 2: {delete player; player = new PlayerSnake(cx, cy, tmp_hp, tmp_dmg); player->setSprite("tachka.png"); player->setDirection(dir); player->setScale(1, 1); z3.play(); }break;
-		case 3: {delete player; player = new PlayerUsual(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel.png"); player->setScale(0.5, 0.5); z2.play(); }break;
-		case 4: {delete player; player = new PlayerInvisible(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel.png"); player->setScale(0.5, 0.5); z4.play(); }break;
+		case 1: {delete player; player = new PlayerBoss(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel_with_gun.png"); player->setScale(0.5, 0.5); z1->play(); }break;
+		case 2: {delete player; player = new PlayerSnake(cx, cy, tmp_hp, tmp_dmg); player->setSprite("tachka.png"); player->setDirection(dir); player->setScale(1, 1); z3->play(); }break;
+		case 3: {delete player; player = new PlayerUsual(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel.png"); player->setScale(0.5, 0.5); z2->play(); }break;
+		case 4: {delete player; player = new PlayerInvisible(cx, cy, tmp_hp, tmp_dmg); player->setSprite("chel.png"); player->setScale(0.5, 0.5); z4->play(); }break;
 		default:
 			break;
 		}
