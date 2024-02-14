@@ -10,8 +10,9 @@
 #define SCREEN_WIDTH 1000
 #define SCREEN_HEIGHT 1000
 
+/* Класс для создания и отображения спрайта */
 
-class Gui //класс для создания и отображения спрайта
+class Gui
 {
 private:
 	sf::Texture Texture;
@@ -33,7 +34,9 @@ public:
 	sf::Sprite getSprite();
 };
 
-class Map //класс карты
+/* Карта */
+
+class Map 
 {
 private:
 	int id;
@@ -50,6 +53,8 @@ public:
 	void setId(int id);
 	void setXY(int x_, int y_);
 };
+
+/* Пуля */
 
 class Bullet
 {
@@ -72,7 +77,10 @@ public:
 };
 
 class Mob;
-class Player //класс игрока абстрактный
+
+/* Игрок */
+
+class Player 
 {
 protected:
 	sf::Texture player_texture;
@@ -102,21 +110,20 @@ public:
 	void addHealth(double add);
 
 	
-	//sf::Vector2f getSpriteCenter();
 	sf::Sprite getSprite();
 	void setSprite(std::string filename);
 	void setScale(double x, double y);
 	bool CheckWall();
 };
 
-class PlayerUsual : public Player //обычный игрок
+class PlayerUsual : public Player //Обычный 
 {
 public:
 	PlayerUsual() : Player() {}
 	PlayerUsual(double x, double y, double health, double damage) : Player(x, y, health, damage) {}
 };
 
-class PlayerInvisible : public Player //невидимый игрок
+class PlayerInvisible : public Player //Невидимый
 {
 public:
 	PlayerInvisible() : Player() {}
@@ -124,7 +131,7 @@ public:
 	void draw(sf::RenderWindow& window) override;
 };
 
-class PlayerBoss : public Player //игрок на поле босса
+class PlayerBoss : public Player //Игрок на поле босса
 {
 public:
 	PlayerBoss() : Player() {}
@@ -132,7 +139,7 @@ public:
 	void attack(Bullet* bullet, double dir_x, double dir_y, double player_x, double player_y) override;
 };
 
-class PlayerSnake : public Player //игрок который ходит как змеЮКА СУКА!
+class PlayerSnake : public Player //Игрок с движением по вектору
 {
 private:
 	double snake_move_x[4] = { 0, 0, 5, -5 };
@@ -168,11 +175,25 @@ public:
 	int checkWall();
 	int getHealth();
 	int getDamage();
-	sf::Vector2f getSpriteCenter();
 	void tookDamage(Player* p);
 };
-class Sound;
-class Buff //класс зелек (увеличение хп и урона)
+
+/* Звук */
+
+class Sound
+{
+private:
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
+public:
+	Sound(std::string namefile, int volume);
+	void ChangeVolume(int volume);
+	void play();
+};
+
+/* Бонус */
+
+class Buff 
 {
 protected:
 	sf::Texture buff_texture;
@@ -188,17 +209,8 @@ public:
 	double getX();
 	double getY();
 };
-class Sound
-{
-private:
-	sf::SoundBuffer buffer;
-	sf::Sound sound;
-public:
-	Sound(std::string namefile, int volume);
-	void ChangeVolume(int volume);
-	void play();
-};
-class Health : public Buff
+
+class Health : public Buff //Здоровье
 {
 private:
 	int bonus = 5;
@@ -207,7 +219,7 @@ public:
 	void BuffPlayer(Player& player) override;
 };
 
-class Damage : public Buff
+class Damage : public Buff //Урон
 {
 private:
 	int bonus = 5;
@@ -216,8 +228,9 @@ public:
 	void BuffPlayer(Player& player) override;
 };
 
+/* Игра */
 
-class Game //класс игры (тут вся отрисовка и тд)
+class Game 
 {
 private:
 	Player* player = new Player();
@@ -239,8 +252,9 @@ public:
 	void swapPlayerType(Sound* z1, Sound* z2, Sound* z3, Sound* z4);
 };
 
+/* Таймер */
 
-class Timer //класс секундомера
+class Timer 
 {
 private:
 	sf::Clock clock;
@@ -253,8 +267,9 @@ public:
 	int StartTimer();
 };
 
+/* Класс для создания и отображения текста */
 
-class TextGui //класс для создания и отображения текста
+class TextGui 
 {
 private:
 	sf::Font font;
@@ -275,7 +290,7 @@ public:
 	void draw(sf::RenderWindow& window);
 };
 
-
+/* Музыка */
 
 class Music
 {

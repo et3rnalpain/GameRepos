@@ -1,5 +1,4 @@
 ﻿#include <iostream>
-//#include <SFML/Graphics.hpp>
 #include "Engine.h"
 using namespace sf;
 
@@ -9,6 +8,6 @@ int main()
 	Game game;
 	game.MainMenu();
 	game.StartGameCycle();
-	game.StartTimeCycle(); //закоментите если время заебало после каждого закрытия
+	game.StartTimeCycle();
 	return 0;
 }

@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-/* Карта */
+/* Карта *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Map;
 Map::Map()
@@ -50,7 +50,7 @@ void Map::setXY(int x_, int y_)
 double Map::getX() { return x; }
 double Map::getY() { return y; }
 
-/* Игрок */
+/* Игрок *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Player;
 Player::Player()
@@ -209,12 +209,6 @@ void Player::setXY(double x, double y)
 	this->y = y;
 }
 
-/*sf::Vector2f Player::getSpriteCenter()
-{
-	sf::Vector2f center(this->x + (player_sprite.getTextureRect().width / 2), this->y + (player_sprite.getTextureRect().height / 2));
-	return center;
-}*/
-
 sf::Sprite Player::getSprite(){
 	return this->player_sprite;
 }
@@ -256,7 +250,7 @@ void Player::addHealth(double add)
 	health += add;
 }
 
-/* Наследники класса Игрок */
+/* Наследники класса Игрок *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class PlayerUsual; //Обычный
 
@@ -311,7 +305,7 @@ void PlayerSnake::setDirection(int dir) {
 	this->player_sprite.setScale(0.5, 0.5);
 }
 
-/* Пуля */
+/* Пуля *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Bullet;
 Bullet::Bullet()
@@ -401,7 +395,7 @@ void Bullet::removeBullet() {
 	this->bullet_sprite.setPosition(x, y);
 }
 
-/* Моб */
+/* Моб *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Mob;
 Mob::Mob()
@@ -518,7 +512,7 @@ void Mob::tookDamage(Player* p){
 	this->health -= p->getDamage();
 }
 
-/* Игра */
+/* Игра *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Game;
 void Game::MainMenu()
@@ -714,7 +708,6 @@ void Game::StartGameCycle()
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->checkCurrId() == 1) {
 				if (!bullet->isBulletAlive()) {
-					//bullet = new Bullet(tmp_dir.x, tmp_dir.y, player->getSpriteCenter().x, player->getSpriteCenter().y);
 					bullet = new Bullet(tmp_dir.x, tmp_dir.y, player->getX(), player->getY());
 					shoot.play();
 				}
@@ -851,7 +844,6 @@ int Game::checkCurrId()
 			id = maps[i].getId();
 		}
 	}
-	//std::cout << player->getSpriteCenter().x << " " << player->getSpriteCenter().y << std::endl;
 	return id;
 }
 
@@ -901,14 +893,15 @@ void Game::regenerateBuff()
 	}
 }
 
-/* Бонусы */
+/* Бонусы *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Buff;
 class Health;
 class Damage;
 
-Buff::Buff() 
+Buff::Buff()
 {
+	snd = nullptr;
 	x = rand() % (SCREEN_WIDTH - 100) + 50;
 	y = rand() % (SCREEN_HEIGHT - 100) + 50;
 	isActive = true;
@@ -931,7 +924,7 @@ void Buff::BuffPlayer(Player& player) {}
 double Buff::getX() { return x; }
 double Buff::getY() { return y; }
 
-Damage::Damage() 
+Damage::Damage() //Урон 
 {
 	buff_texture.loadFromFile("brass_knuckles.png");
 	buff_texture.setSmooth(true);
@@ -950,6 +943,16 @@ void Damage::BuffPlayer(Player& player)
 	}
 }
 
+
+Health::Health() //Здоровье
+{
+	buff_texture.loadFromFile("pill.png");
+	buff_texture.setSmooth(true);
+	buff_sprite.setTexture(buff_texture);
+	buff_sprite.setPosition(sf::Vector2f(x, y));
+	snd = new Sound("health.wav", 50);
+}
+
 void Health::BuffPlayer(Player& player)
 {
 	if (isActive && player.getX() >= x && player.getX() <= x + buff_sprite.getTextureRect().width && player.getY() >= y && player.getY() <= y + buff_sprite.getTextureRect().height)
@@ -960,16 +963,7 @@ void Health::BuffPlayer(Player& player)
 	}
 }
 
-Health::Health()
-{
-	buff_texture.loadFromFile("pill.png");
-	buff_texture.setSmooth(true);
-	buff_sprite.setTexture(buff_texture);
-	buff_sprite.setPosition(sf::Vector2f(x, y));
-	snd = new Sound("health.wav", 50);
-}
-
-/* Таймер */
+/* Таймер *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Timer;
 void Timer::StartTime()
@@ -993,7 +987,7 @@ int Timer::StartTimer()
 	return 100 - static_cast<unsigned int>(clock.getElapsedTime().asSeconds());
 }
 
-/* Спрайты */
+/* Спрайты *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Gui;
 Gui::Gui(std::string filename, int x, int y)
@@ -1022,6 +1016,8 @@ void Gui::draw(sf::RenderWindow& window)
 {
 	window.draw(Sprite);
 }
+
+/* Отображение текста *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TextGui::TextGui(std::string message, int size, int x, int y)
 {
@@ -1060,6 +1056,8 @@ void TextGui::setstring(std::string message)
 	text.setString(message);
 }
 
+/* Звук *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Sound::Sound(std::string namefile, int volume)
 {
 	buffer.loadFromFile(namefile);
@@ -1076,6 +1074,8 @@ void Sound::play()
 {
 	sound.play();
 }
+
+/* Музыка *///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Music::Music(std::string namefile, int volume, bool loop)
 {
